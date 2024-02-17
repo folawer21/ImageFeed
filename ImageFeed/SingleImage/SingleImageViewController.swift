@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 
-class SingleImageViewController: UIViewController{
+final class SingleImageViewController: UIViewController{
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
     @IBAction func didBackButtonTap(_ sender: Any) {
