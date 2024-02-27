@@ -35,20 +35,18 @@ final class OAuth2Service{
                 do {
                     let decoder = JSONDecoder()
                     let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    print(11111,response.access_token)
                     completition(.success(response.access_token))
                     
                 } catch {
-                    print(2222,error)
                     completition(.failure(error))
                     
                 }
             case .failure(let error):
-                print(33333,error)
                 completition(.failure(error))
             }
             
         }
+        task.resume()
     }
     
 }
