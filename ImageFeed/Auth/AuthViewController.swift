@@ -24,9 +24,7 @@ final class AuthViewController: UIViewController {
         buildScreen()
         configureBackButton()
     }
-    override func viewWillAppear(_ animated: Bool) {
-
-    }
+    
     func buildScreen(){
         view.backgroundColor = UIColor(named: "YPBlack")
         authImageView.translatesAutoresizingMaskIntoConstraints = false

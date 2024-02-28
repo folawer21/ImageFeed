@@ -15,10 +15,12 @@ final class SplashViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tokenStorage.token = nil
         showSegue()
     }
-    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        buildScreen()
+    }
     private func buildScreen(){
         self.view.backgroundColor = UIColor(named: "YPBlack")
         imageView.image = UIImage(named: "SplashScreen")
@@ -26,12 +28,9 @@ final class SplashViewController: UIViewController {
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
-            
-        
         ])
-        
-        
     }
+    
     private func switchToTabBarController(){
         guard let window = UIApplication.shared.windows.first else {
             assertionFailure("Invalid window configuration")
@@ -68,7 +67,6 @@ extension SplashViewController{
             super.prepare(for: segue, sender: sender)
         }
     }
-    
 }
 
 extension SplashViewController: AuthViewControllerDelegate{

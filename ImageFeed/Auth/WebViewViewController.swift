@@ -5,9 +5,10 @@
 //  Created by Александр  Сухинин on 24.02.2024.
 //
 
-import Foundation
+
 import UIKit
 import WebKit
+
 final class WebViewViewController: UIViewController {
     weak var delegate : WebViewViewControllerDelegate?
     private var webView = WKWebView()
@@ -27,10 +28,7 @@ final class WebViewViewController: UIViewController {
     }
     override func viewDidDisappear(_ animated: Bool) {
         webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
-    }
-    
-    
-    
+    }    
     private func buildScreen() {
         webView.backgroundColor = UIColor(named: "YPWhite")
         webView.translatesAutoresizingMaskIntoConstraints = false
