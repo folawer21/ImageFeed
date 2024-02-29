@@ -66,7 +66,6 @@ final class AuthViewController: UIViewController {
         navigationController?.navigationBar.backIndicatorImage = UIImage(named: "backButton")
         navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "backButton")
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationItem.backBarButtonItem?.customView?.translatesAutoresizingMaskIntoConstraints = false
         navigationItem.backBarButtonItem?.tintColor = UIColor(named: "YPBlack")
     }
 

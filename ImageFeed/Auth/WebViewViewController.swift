@@ -25,6 +25,7 @@ final class WebViewViewController: UIViewController {
         buildScreen()
         loadAuthView()
         webView.navigationDelegate = self
+        
     }
     override func viewDidDisappear(_ animated: Bool) {
         webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
@@ -101,9 +102,7 @@ extension WebViewViewController: WKNavigationDelegate{
         else{
             return nil
         }
-        
     }
-    
     
     func webView(
         _ webView: WKWebView,
