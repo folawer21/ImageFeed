@@ -22,13 +22,13 @@ final class AuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureScreen()
-        configureBackButton()
     }
     
     private func configureScreen(){
         buildScreen()
         addSubViews()
         activateConstraints()
+        configureBackButton()
     }
     private func buildScreen(){
         view.backgroundColor = UIColor(named: "YPBlack")
@@ -66,6 +66,7 @@ final class AuthViewController: UIViewController {
         navigationController?.navigationBar.backIndicatorImage = UIImage(named: "backButton")
         navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "backButton")
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem?.customView?.translatesAutoresizingMaskIntoConstraints = false
         navigationItem.backBarButtonItem?.tintColor = UIColor(named: "YPBlack")
     }
 

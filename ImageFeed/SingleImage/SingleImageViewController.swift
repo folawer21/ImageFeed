@@ -17,10 +17,11 @@ final class SingleImageViewController: UIViewController{
     }
     
     @IBAction func didTapShareButton(_ sender: Any) {
+        guard let image = image else {return }
         let share = UIActivityViewController(activityItems:[image] , applicationActivities: nil)
         present(share,animated: true, completion: nil)
     }
-    var image: UIImage! {
+    var image: UIImage? {
         didSet {
             guard isViewLoaded else { return }
             imageView.image = image

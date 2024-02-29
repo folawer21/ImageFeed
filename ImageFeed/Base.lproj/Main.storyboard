@@ -102,14 +102,14 @@
             <objects>
                 <viewController id="PPt-Sa-hp1" userLabel="AuthViewController" customClass="AuthViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cNo-Oz-bhB">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="erO-1X-AdC"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="aWB-kX-ShG"/>
                     <connections>
-                        <segue destination="ega-0g-PQa" kind="show" identifier="showWebView" id="lOG-rW-mMf"/>
+                        <segue destination="ega-0g-PQa" kind="presentation" identifier="showWebView" modalPresentationStyle="fullScreen" id="lOG-rW-mMf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NgV-8r-Bkj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -180,7 +180,7 @@
                                             <constraint firstAttribute="height" constant="24" id="zhw-Mw-5BC"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="Backward"/>
+                                        <state key="normal" image="backward"/>
                                         <connections>
                                             <action selector="didBackButtonTap:" destination="DmF-8O-fXI" eventType="touchUpInside" id="KKf-8a-hIv"/>
                                         </connections>
@@ -239,7 +239,7 @@
             <objects>
                 <viewController id="ega-0g-PQa" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GAM-rd-zc2">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="KWG-Eo-dhm"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -257,7 +257,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="QlY-J5-pRC"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="MB2-R3-taL">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="56"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -281,7 +281,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="YUo-JQ-G0c"/>
                     <connections>
-                        <segue destination="XVj-hn-pQZ" kind="show" identifier="segueToAuthorization" id="52I-hz-Fme"/>
+                        <segue destination="XVj-hn-pQZ" kind="presentation" identifier="segueToAuthorization" modalPresentationStyle="fullScreen" id="52I-hz-Fme"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mUx-SJ-tKb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -291,7 +291,7 @@
     </scenes>
     <resources>
         <image name="0" width="200" height="132"/>
-        <image name="Backward" width="24" height="24"/>
+        <image name="backward" width="24" height="24"/>
         <image name="likeOn" width="42" height="42"/>
         <image name="mainNoActive" width="30" height="30"/>
         <image name="profileNoActive" width="30" height="30"/>
