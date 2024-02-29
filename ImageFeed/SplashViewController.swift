@@ -24,6 +24,7 @@ final class SplashViewController: UIViewController {
     private func buildScreen(){
         self.view.backgroundColor = UIColor(named: "YPBlack")
         imageView.image = UIImage(named: "SplashScreen")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(imageView)
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),

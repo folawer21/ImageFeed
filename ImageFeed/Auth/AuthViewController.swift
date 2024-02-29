@@ -21,21 +21,19 @@ final class AuthViewController: UIViewController {
     private let ShowWebViewSegueIdentifier = "showWebView"
     override func viewDidLoad() {
         super.viewDidLoad()
-        buildScreen()
+        configureScreen()
         configureBackButton()
     }
     
-    func buildScreen(){
+    private func configureScreen(){
+        buildScreen()
+        addSubViews()
+        activateConstraints()
+    }
+    private func buildScreen(){
         view.backgroundColor = UIColor(named: "YPBlack")
         authImageView.translatesAutoresizingMaskIntoConstraints = false
         authImageView.image = UIImage(named: "auth")
-        view.addSubview(authImageView)
-        NSLayoutConstraint.activate([
-            authImageView.widthAnchor.constraint(equalToConstant: 60),
-            authImageView.heightAnchor.constraint(equalToConstant: 60),
-            authImageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
-            authImageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
-        ])
         authButton.translatesAutoresizingMaskIntoConstraints = false
         authButton.backgroundColor = UIColor(named: "YPWhite")
         authButton.setTitle("Войти", for: .normal)
@@ -43,18 +41,27 @@ final class AuthViewController: UIViewController {
         authButton.layer.cornerRadius = 16
         authButton.layer.masksToBounds = true
         authButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+    }
+    @objc func buttonTapped(_ sender: Any){
+        self.performSegue(withIdentifier: ShowWebViewSegueIdentifier, sender: self)
+    }
+    private func addSubViews(){
+        view.addSubview(authImageView)
         view.addSubview(authButton)
+    }
+    private func activateConstraints(){
+        NSLayoutConstraint.activate([
+            authImageView.widthAnchor.constraint(equalToConstant: 60),
+            authImageView.heightAnchor.constraint(equalToConstant: 60),
+            authImageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            authImageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
+        ])
         NSLayoutConstraint.activate([
             authButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             authButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             authButton.topAnchor.constraint(equalTo: authImageView.bottomAnchor, constant: 204)
         ])
-        
     }
-    @objc func buttonTapped(_ sender: Any){
-        self.performSegue(withIdentifier: ShowWebViewSegueIdentifier, sender: self)
-    }
-    
     private func configureBackButton(){
         navigationController?.navigationBar.backIndicatorImage = UIImage(named: "backButton")
         navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "backButton")
