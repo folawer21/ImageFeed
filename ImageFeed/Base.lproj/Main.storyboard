@@ -109,12 +109,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="aWB-kX-ShG"/>
                     <connections>
-                        <segue destination="ega-0g-PQa" kind="presentation" identifier="showWebView" modalPresentationStyle="fullScreen" id="lOG-rW-mMf"/>
+                        <segue destination="ega-0g-PQa" kind="show" identifier="showWebView" id="G56-X5-KNI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NgV-8r-Bkj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="553.43511450381675" y="-394.36619718309862"/>
+            <point key="canvasLocation" x="698" y="-394"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="MVV-Zb-ODF">
@@ -244,10 +244,11 @@
                         <viewLayoutGuide key="safeArea" id="KWG-Eo-dhm"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="K1S-Px-Zw5"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PWV-XI-hNB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1521.3740458015266" y="-394.36619718309862"/>
+            <point key="canvasLocation" x="1810" y="-394"/>
         </scene>
         <!--AuthorizationNavigation Controller-->
         <scene sceneID="MWS-Ao-Azh">
