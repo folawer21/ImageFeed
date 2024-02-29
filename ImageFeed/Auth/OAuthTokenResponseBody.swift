@@ -8,8 +8,14 @@
 import Foundation
 
 struct OAuthTokenResponseBody: Decodable {
-    var access_token: String
-    init(access_token: String) {
-        self.access_token = access_token
+    var accessToken: String
+    var tokenType: String
+    var scope: String
+    var createdAt: String
+    init(accessToken: String,tokenType: String, scope: String,createdAt:String) {
+        self.accessToken = accessToken
+        self.tokenType = tokenType
+        self.scope = scope
+        self.createdAt = createdAt
     }
 }
