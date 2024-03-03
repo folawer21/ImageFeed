@@ -12,6 +12,7 @@ final class SplashViewController: UIViewController {
     let imageView = UIImageView()
     let segueToAuthorization = "segueToAuthorization"
     let tokenStorage = OAuth2TokenStorage()
+    private let profileService = ProfileService.shared
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -43,7 +44,9 @@ final class SplashViewController: UIViewController {
    
     func showSegue(){
         if let token = tokenStorage.token {
-            switchToTabBarController()
+            guard let token = tokenStorage.token else {return }
+            fetchProfile(token)
+//            switchToTabBarController()
         }
         else {
             self.performSegue(withIdentifier: segueToAuthorization, sender: self)
@@ -73,7 +76,24 @@ extension SplashViewController{
 extension SplashViewController: AuthViewControllerDelegate{
     func didAuthenticate(_ vc: AuthViewController) {
         vc.dismiss(animated: true)
-        switchToTabBarController()
+        guard let token = tokenStorage.token else {return}
+        fetchProfile(token)
+//        switchToTabBarController()
+    }
+    private func fetchProfile(_ token: String){
+        UIBlockingProgressHUD.show()
+        profileService.fetchProfile(token){ [weak self] result in
+            UIBlockingProgressHUD.dissmiss()
+            guard let self = self else {return}
+            switch result {
+            case .success(let profile):
+                self.switchToTabBarController()
+            case .failure(let error):
+                print(error)
+            }
+            
+            
+        }
     }
 }
 

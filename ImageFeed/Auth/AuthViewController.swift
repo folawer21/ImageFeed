@@ -5,7 +5,7 @@
 //  Created by Александр  Сухинин on 24.02.2024.
 //
 
-
+import ProgressHUD
 import UIKit
 
 protocol AuthViewControllerDelegate: AnyObject{
@@ -85,7 +85,9 @@ final class AuthViewController: UIViewController {
 extension AuthViewController: WebViewViewControllerDelegate{
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         vc.dismiss(animated: true)
+        UIBlockingProgressHUD.show()
         oauth2Service.fetchOAuthToken(code: code){ result in
+            UIBlockingProgressHUD.dissmiss()
             switch result{
             case .success(let token):
                 self.tokenStorage.token = token

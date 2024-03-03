@@ -7,12 +7,22 @@ class ProfileViewController: UIViewController {
     private lazy var nameLabel = UILabel()
     private lazy var nicknameLabel = UILabel()
     private lazy var  descriptionLabel = UILabel()
+    private lazy var profileService = ProfileService.shared
+    private lazy var tokenStorage = OAuth2TokenStorage()
     private  var exitButton = UIButton.systemButton(with: UIImage(named: "exitButton")!, target: self, action: nil)
     override func viewDidLoad() {
         super.viewDidLoad()
         configureScreen()
+        loadProfileData()
+        
     }
-    
+
+    func loadProfileData(){
+        guard let profile = profileService.profile else {return}
+        self.nameLabel.text = profile.name
+        self.nicknameLabel.text = profile.loginName
+        self.descriptionLabel.text = profile.bio
+    }
     func configureScreen(){
         buildScreen()
         addSubViews()
