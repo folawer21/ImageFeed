@@ -88,7 +88,9 @@ extension SplashViewController: AuthViewControllerDelegate{
             guard let self = self else {return}
             switch result {
             case .success(let profile):
-                self.fetchPhoto(profile.username)
+                //TODO: вернуть
+                self.switchToTabBarController()
+                //self.fetchPhoto(profile.username)
             case .failure(let error):
                 print(error)
             }

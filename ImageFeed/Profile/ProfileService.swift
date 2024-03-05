@@ -66,26 +66,15 @@ final class ProfileService{
             completion(.failure(ProfileServiceError.invalidRequest))
             return
         }
-        
-        
-        
-        
-        
-        let task = URLSession.shared.data(for: urlRequest){ [weak self] result in
+        let task = URLSession.shared.objectTask(for: urlRequest){ [weak self] (result: Result<ProfileResult,Error>) in
             guard let self = self else {return}
             switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    let response = try decoder.decode(ProfileResult.self, from: data)
-                    let profile = Profile(username: response.username, firstName: response.firstName, lastName: response.lastName,  bio: response.bio)
-                    self.profile = profile
-                    completion(.success(profile))
-                } catch {
-                    completion(.failure(error))
-                }
+            case .success(let profileResult):
+                let profile = Profile(username: profileResult.username, firstName: profileResult.firstName, lastName: profileResult.lastName, bio: profileResult.bio)
+                self.profile = profile
+                completion(.success(profile))
             case .failure(let error):
-                completion(.failure(error))
+                print(error)
             }
             self.task = nil
             self.lastToken = nil
