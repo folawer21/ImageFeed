@@ -13,23 +13,23 @@ final class WebViewViewController: UIViewController {
     weak var delegate : WebViewViewControllerDelegate?
     private var webView = WKWebView()
     private var progressBar = UIProgressView()
-
+    private var estimatedProgressObservation: NSKeyValueObservation?
     enum WebViewConstants{
         static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
     }
-    override func viewWillAppear(_ animated: Bool) {
-        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
-    }
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         buildScreen()
         loadAuthView()
         webView.navigationDelegate = self
-        
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress, 
+             changeHandler: {[weak self]_,_ in
+                 guard let self = self else {return }
+                 self.updateProgress()
+             })
     }
-    override func viewDidDisappear(_ animated: Bool) {
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
-    }    
     private func buildScreen() {
         webView.backgroundColor = UIColor(named: "YPWhite")
         webView.translatesAutoresizingMaskIntoConstraints = false
@@ -67,25 +67,11 @@ final class WebViewViewController: UIViewController {
         let request  = URLRequest(url: url)
         webView.load(request)
     }
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey : Any]?,
-        context: UnsafeMutableRawPointer?
-    ){
-        if keyPath == #keyPath(WKWebView.estimatedProgress){
-            updateProgress()
-        } else{
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
-    }
+
     private func updateProgress(){
         progressBar.progress = Float(webView.estimatedProgress)
         progressBar.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
-    
-    
-    
 }
 
 extension WebViewViewController: WKNavigationDelegate{

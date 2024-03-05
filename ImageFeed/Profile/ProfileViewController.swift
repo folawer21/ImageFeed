@@ -9,14 +9,27 @@ class ProfileViewController: UIViewController {
     private lazy var  descriptionLabel = UILabel()
     private lazy var profileService = ProfileService.shared
     private lazy var tokenStorage = OAuth2TokenStorage()
+    private var profileImageServiceObserver: NSObjectProtocol?
     private  var exitButton = UIButton.systemButton(with: UIImage(named: "exitButton")!, target: self, action: nil)
     override func viewDidLoad() {
         super.viewDidLoad()
         configureScreen()
         loadProfileData()
-        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification, object: nil, queue: .main){ [weak self] _ in
+                guard let self = self else {return }
+                self.updateAvatar()
+                
+            }
+        updateAvatar()
     }
-
+    private func updateAvatar(){
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else {return}
+        //TODO: Обновление аватара
+    }
     func loadProfileData(){
         guard let profile = profileService.profile else {return}
         self.nameLabel.text = profile.name
