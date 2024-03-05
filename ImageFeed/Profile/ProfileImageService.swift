@@ -8,7 +8,7 @@
 import Foundation
 
 struct UserResult: Codable{
-    var profileImage: [String]
+    var profileImage: [String: String]
     
     enum CodingKeys:String,CodingKey{
         case profileImage = "profile_image"
@@ -28,7 +28,7 @@ final class ProfileImageService{
     private init(){}
     
     private func makeURLRequest(username: String) -> URLRequest? {
-        guard let url = URL(string: "https://api.unsplash.com/users/:\(username)") else {return nil}
+        guard let url = URL(string: "https://api.unsplash.com/users/\(username)") else {return nil}
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
         guard let token = tokenStorage.token else {return nil}
@@ -49,12 +49,11 @@ final class ProfileImageService{
             completion(.failure(ProfileServiceError.invalidRequest))
             return
         }
-        
         let task = URLSession.shared.objectTask(for: urlRequest){ [weak self] (result: Result<UserResult,Error>) in
             guard let self = self else {return}
             switch result{
             case .success(let userResult):
-                let smallPhotoURL = userResult.profileImage[0]
+                guard let smallPhotoURL = userResult.profileImage["small"] else {return }
                 self.avatarURL = smallPhotoURL
                 completion(.success(smallPhotoURL))
                 NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL": smallPhotoURL])
