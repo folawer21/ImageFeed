@@ -49,23 +49,15 @@ final class ProfileImageService{
             completion(.failure(ProfileServiceError.invalidRequest))
             return
         }
-        let task = URLSession.shared.data(for: urlRequest){ [weak self] result in
+        
+        let task = URLSession.shared.objectTask(for: urlRequest){ [weak self] (result: Result<UserResult,Error>) in
             guard let self = self else {return}
             switch result{
-            case .success(let data):
-                do{
-                    let decoder = JSONDecoder()
-                    let response = try decoder.decode(UserResult.self, from: data)
-                    guard let smallPhotoUrl = response.profileImage.first else {return }
-                    print(smallPhotoUrl)
-                    self.avatarURL = smallPhotoUrl
-                    completion(.success(smallPhotoUrl))
-                    //TODO: может быть добавить чтобы передавалась сразу ссылка а не строчка
-                    NotificationCenter.default.post(
-                        name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL": smallPhotoUrl])
-                }catch{
-                    completion(.failure(error))
-                }
+            case .success(let userResult):
+                let smallPhotoURL = userResult.profileImage[0]
+                self.avatarURL = smallPhotoURL
+                completion(.success(smallPhotoURL))
+                NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL": smallPhotoURL])
             case .failure(let error):
                 completion(.failure(error))
             }
