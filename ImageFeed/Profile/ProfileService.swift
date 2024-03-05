@@ -57,12 +57,14 @@ final class ProfileService{
     func fetchProfile(_ token:String, completion: @escaping(Result<Profile,Error>) -> Void){
         //TODO: новые ошибки
         guard lastToken != token else {
+            print("[fetchProfile]: ProfileServiceError - lastToken == token")
             completion(.failure(ProfileServiceError.invalidRequest))
             return
         }
         task?.cancel()
         lastToken = token
         guard let urlRequest = makeURLRequest(token: token) else {
+            print("[fetchProfile]: ProfileServiceError - invalidRequest")
             completion(.failure(ProfileServiceError.invalidRequest))
             return
         }
@@ -74,7 +76,7 @@ final class ProfileService{
                 self.profile = profile
                 completion(.success(profile))
             case .failure(let error):
-                print(error)
+                print("[fetchProfile]: ProfileServiceError - \(error)")
             }
             self.task = nil
             self.lastToken = nil

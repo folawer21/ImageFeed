@@ -28,7 +28,7 @@ final class OAuth2Service{
             URLQueryItem(name: "grant_type", value: "authorization_code")
         ]
         guard let url = urlComponents.url else { 
-            assertionFailure("Failed to create URL")
+            assertionFailure("[makeOAuthTokenRequest]: Failed to create URL")
             return nil }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -38,13 +38,14 @@ final class OAuth2Service{
     func fetchOAuthToken(code: String, completition: @escaping (Result<String,Error>) -> Void){
         assert(Thread.isMainThread)
         guard lastCode != code else {
+            print("[fetchOAuthToken]: AuthServiceError - invalidRequest")
             completition(.failure(AuthServiceError.invalidRequest))
             return
         }
         task?.cancel()
         lastCode = code
         guard let urlRequest = makeOAuthTokenRequest(code: code) else {
-            print(11111)
+            print("[fetchOAuthToken]: AuthServiceError - invalidRequest")
             completition(.failure(AuthServiceError.invalidRequest))
             return
         }
@@ -55,7 +56,7 @@ final class OAuth2Service{
                 let token = tokenBody.accessToken
                 completition(.success(token))
             case .failure(let error):
-                print(2222)
+                print("[fetchOAuthToken]: AuthServiceError - \(error)")
                 completition(.failure(error))
             }
             self.task = nil
