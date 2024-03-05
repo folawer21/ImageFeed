@@ -31,21 +31,25 @@ final class ProfileImageService{
         guard let url = URL(string: "https://api.unsplash.com/users/\(username)") else {return nil}
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
+        print(url)
+        print(tokenStorage.token)
         guard let token = tokenStorage.token else {return nil}
         urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        print("asdads",urlRequest)
         return urlRequest
-        
     }
     
     func fetchProfileImageURL(username: String, completion: @escaping (Result<String,Error>) -> Void){
         guard lastUsername != username else {
             //TODO: новые ошибки
+            print(888888)
             completion(.failure(ProfileServiceError.invalidRequest))
             return
         }
         task?.cancel()
         lastUsername = username
         guard let urlRequest = makeURLRequest(username: username) else {
+            print(77777)
             completion(.failure(ProfileServiceError.invalidRequest))
             return
         }
@@ -58,6 +62,7 @@ final class ProfileImageService{
                 completion(.success(smallPhotoURL))
                 NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL": smallPhotoURL])
             case .failure(let error):
+                print(6666)
                 completion(.failure(error))
             }
             self.task = nil

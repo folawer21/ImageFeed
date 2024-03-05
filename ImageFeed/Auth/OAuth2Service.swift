@@ -19,7 +19,7 @@ final class OAuth2Service{
     
     private init() {}
     private func makeOAuthTokenRequest(code: String) -> URLRequest? {
-        var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token12121112")!
+        var  urlComponents = URLComponents(string: "https://unsplash.com/oauth/token")!
         urlComponents.queryItems = [
             URLQueryItem( name: "client_id", value: Constants.accessKey),
             URLQueryItem(name: "client_secret", value: Constants.secretKey),
@@ -44,10 +44,10 @@ final class OAuth2Service{
         task?.cancel()
         lastCode = code
         guard let urlRequest = makeOAuthTokenRequest(code: code) else {
+            print(11111)
             completition(.failure(AuthServiceError.invalidRequest))
             return
         }
-        
         let task = URLSession.shared.objectTask(for: urlRequest){ [weak self] (result: Result<OAuthTokenResponseBody,Error>) in
             guard let self = self else {return }
             switch result {
@@ -55,6 +55,7 @@ final class OAuth2Service{
                 let token = tokenBody.accessToken
                 completition(.success(token))
             case .failure(let error):
+                print(2222)
                 completition(.failure(error))
             }
             self.task = nil

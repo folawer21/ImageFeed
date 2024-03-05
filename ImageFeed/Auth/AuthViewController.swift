@@ -9,7 +9,7 @@ import ProgressHUD
 import UIKit
 
 protocol AuthViewControllerDelegate: AnyObject{
-    func didAuthenticate(_ vc: AuthViewController)
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
 }
 
 final class AuthViewController: UIViewController {
@@ -23,7 +23,6 @@ final class AuthViewController: UIViewController {
         super.viewDidLoad()
         configureScreen()
     }
-    
     private func configureScreen(){
         buildScreen()
         addSubViews()
@@ -68,7 +67,6 @@ final class AuthViewController: UIViewController {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.backBarButtonItem?.tintColor = UIColor(named: "YPBlack")
     }
-
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == ShowWebViewSegueIdentifier {
             guard
@@ -79,25 +77,12 @@ final class AuthViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
-
 }
 
 extension AuthViewController: WebViewViewControllerDelegate{
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         vc.dismiss(animated: true)
-        UIBlockingProgressHUD.show()
-        oauth2Service.fetchOAuthToken(code: code){ result in
-            UIBlockingProgressHUD.dissmiss()
-            switch result{
-            case .success(let token):
-                self.tokenStorage.token = token
-                self.delegate?.didAuthenticate(self)
-            case .failure(let error):
-                print(error)
-                let errorAlert = UIAlertController(title: "Что-то пошло не так", message: "Не удалось войти в систему", preferredStyle: .alert)
-                errorAlert.addAction(UIAlertAction(title: "OK",style: .default, handler: nil ))
-            }
-        }
+        self.delegate?.authViewController(self, didAuthenticateWithCode: code)
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {

@@ -75,11 +75,29 @@ extension SplashViewController{
 }
 
 extension SplashViewController: AuthViewControllerDelegate{
-    func didAuthenticate(_ vc: AuthViewController) {
-        vc.dismiss(animated: true)
-        guard let token = tokenStorage.token else {return}
-        fetchProfile(token)
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String){
+        UIBlockingProgressHUD.show()
+        dismiss(animated: true){ [weak self] in
+            guard let self = self else {return }
+            self.fetchOAuthToken(code)
+        }
     }
+    private func fetchOAuthToken(_ code: String){
+        OAuth2Service.shared.fetchOAuthToken(code: code) { [weak self] result in
+            guard let self = self else {return }
+            switch result {
+            case .success(let token):
+                self.tokenStorage.token = token
+                self.fetchProfile(token)
+                UIBlockingProgressHUD.dissmiss()
+            case .failure:
+                UIBlockingProgressHUD.dissmiss()
+                self.showAlert()
+                print(5555)
+            }
+        }
+    }
+   
     private func fetchProfile(_ token: String){
         UIBlockingProgressHUD.show()
         profileService.fetchProfile(token){ [weak self] result in
@@ -90,6 +108,7 @@ extension SplashViewController: AuthViewControllerDelegate{
             case .success(let profile):
                 self.fetchPhoto(profile.username)
             case .failure(let error):
+                print(44444)
                 print(error)
             }
         }
@@ -103,9 +122,17 @@ extension SplashViewController: AuthViewControllerDelegate{
             case .success:
                 self.switchToTabBarController()
             case .failure(let error):
+                print(3333333)
                 print(error)
             }
         }
     }
+    private func showAlert(){
+        let errorAlert = UIAlertController(title: "Что-то пошло не так", message: "Не удалось войти в систему", preferredStyle: .alert)
+        errorAlert.addAction(UIAlertAction(title: "OK",style: .default, handler: nil ))
+        self.presentedViewController?.present(errorAlert,animated: true, completion: nil)
+        
+    }
+
 }
 
