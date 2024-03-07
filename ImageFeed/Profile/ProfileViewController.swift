@@ -1,6 +1,5 @@
-import Foundation
-
 import UIKit
+import Kingfisher
 
 class ProfileViewController: UIViewController {
     private lazy var profileImageView = UIImageView()
@@ -29,6 +28,8 @@ class ProfileViewController: UIViewController {
             let url = URL(string: profileImageURL)
         else {return}
         //TODO: Обновление аватара
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        profileImageView.kf.setImage(with: url,options: [.processor(processor)])
     }
     func loadProfileData(){
         guard let profile = profileService.profile else {return}
