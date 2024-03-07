@@ -45,6 +45,7 @@ final class SplashViewController: UIViewController {
    
     func showSegue(){
         if let token = tokenStorage.token {
+            print("213122312:",token)
             guard let token = tokenStorage.token else {return }
             fetchProfile(token)
 //            switchToTabBarController()
