@@ -14,7 +14,8 @@ final class OAuth2TokenStorage{
             guard let myToken = KeychainWrapper.standard.string(forKey: "bearerToken") else {
                 print("Unsuccsessed token getting - token is nil")
                 return nil}
-            return myToken
+//            return myToken
+            return nil
         }
         set {
             guard let myToken = newValue else {print("Unsuccsessed token saving - token is nil"); return}

@@ -45,35 +45,21 @@ final class SplashViewController: UIViewController {
    
     func showSegue(){
         if let token = tokenStorage.token {
-            print("213122312:",token)
+
             guard let token = tokenStorage.token else {return }
             fetchProfile(token)
-//            switchToTabBarController()
+
         }
         else {
-            self.performSegue(withIdentifier: segueToAuthorization, sender: self)
+            let authController = AuthViewController()
+            authController.delegate = self
+            let authNavigationController = UINavigationController(rootViewController: authController)
+            authNavigationController.modalPresentationStyle = .fullScreen
+            present(authNavigationController, animated: true)
         }
     }
 }
 
-
-extension SplashViewController{
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == segueToAuthorization {
-            guard
-                let navigationController = segue.destination as? UINavigationController,
-                let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else {
-                assertionFailure("Failed to prepare for \(segueToAuthorization)")
-                return
-            }
-            viewController.delegate = self
-        }
-        else{
-            super.prepare(for: segue, sender: sender)
-        }
-    }
-}
 
 extension SplashViewController: AuthViewControllerDelegate{
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String){

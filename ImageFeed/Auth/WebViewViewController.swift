@@ -31,6 +31,7 @@ final class WebViewViewController: UIViewController {
              })
     }
     private func buildScreen() {
+        
         webView.backgroundColor = UIColor(named: "YPWhite")
         webView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(webView)
