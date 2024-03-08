@@ -10,6 +10,7 @@ import UIKit
 final class TabBarController: UITabBarController{
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.tabBar.backgroundColor = UIColor(named:"YPBlack")
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
         
         let imageListViewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController")

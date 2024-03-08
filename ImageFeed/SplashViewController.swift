@@ -45,10 +45,8 @@ final class SplashViewController: UIViewController {
    
     func showSegue(){
         if let token = tokenStorage.token {
-
             guard let token = tokenStorage.token else {return }
             fetchProfile(token)
-
         }
         else {
             let authController = AuthViewController()
@@ -80,7 +78,6 @@ extension SplashViewController: AuthViewControllerDelegate{
             case .failure:
                 UIBlockingProgressHUD.dissmiss()
                 self.showAlert()
-                print(5555)
             }
         }
     }
@@ -95,7 +92,6 @@ extension SplashViewController: AuthViewControllerDelegate{
             case .success(let profile):
                 self.fetchPhoto(profile.username)
             case .failure(let error):
-                print(44444)
                 print(error)
             }
         }
@@ -109,7 +105,6 @@ extension SplashViewController: AuthViewControllerDelegate{
             case .success:
                 self.switchToTabBarController()
             case .failure(let error):
-                print(3333333)
                 print(error)
             }
         }

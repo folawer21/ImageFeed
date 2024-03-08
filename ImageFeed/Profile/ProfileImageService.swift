@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 enum ProfileImageServiceError:Error {
     case invalidRequest
 }
@@ -26,9 +25,6 @@ final class ProfileImageService{
     private var task: URLSessionTask?
     private var lastUsername: String?
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
-    
-    
-    
     private init(){}
     
     private func makeURLRequest(username: String) -> URLRequest? {

@@ -18,7 +18,6 @@ class ProfileViewController: UIViewController {
             forName: ProfileImageService.didChangeNotification, object: nil, queue: .main){ [weak self] _ in
                 guard let self = self else {return }
                 self.updateAvatar()
-                
             }
         updateAvatar()
     }
@@ -27,8 +26,7 @@ class ProfileViewController: UIViewController {
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURL)
         else {return}
-        //TODO: Обновление аватара
-        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        let processor = RoundCornerImageProcessor(cornerRadius: 32)
         profileImageView.kf.setImage(with: url,options: [.processor(processor)])
     }
     func loadProfileData(){
@@ -44,7 +42,11 @@ class ProfileViewController: UIViewController {
     }
     
     func buildScreen(){
+        self.view.backgroundColor = UIColor(named: "YPBlack")
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
+        profileImageView.layer.masksToBounds = true
+        profileImageView.layer.cornerRadius = 40
+        profileImageView.backgroundColor = UIColor(named: "YPBlack")
         profileImageView.image = UIImage(named: "ekaterina")
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.text = "Екатерина Новикова"

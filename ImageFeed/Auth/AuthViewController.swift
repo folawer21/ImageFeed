@@ -23,6 +23,7 @@ final class AuthViewController: UIViewController {
         super.viewDidLoad()
         configureScreen()
     }
+   
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.isHidden = true
     }

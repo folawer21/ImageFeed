@@ -17,11 +17,11 @@ final class WebViewViewController: UIViewController {
     enum WebViewConstants{
         static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
     }
-   
     override func viewDidLoad() {
         super.viewDidLoad()
         buildScreen()
         loadAuthView()
+        setNeedsStatusBarAppearanceUpdate()
         webView.navigationDelegate = self
         estimatedProgressObservation = webView.observe(
             \.estimatedProgress, 
@@ -97,7 +97,6 @@ extension WebViewViewController: WKNavigationDelegate{
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
         if let code = code(from: navigationAction){
-            //TODO
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)
             
