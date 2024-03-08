@@ -6,12 +6,20 @@
 //
 
 import Foundation
+enum AuthServiceError: Error{
+    case invalidRequest
+}
+
 final class OAuth2Service{
     
     static let shared = OAuth2Service()
+    private let urlSession = URLSession.shared
+    private var task: URLSessionTask?
+    private var lastCode: String?
+    
     private init() {}
     private func makeOAuthTokenRequest(code: String) -> URLRequest? {
-        var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token")!
+        var  urlComponents = URLComponents(string: "https://unsplash.com/oauth/token")!
         urlComponents.queryItems = [
             URLQueryItem( name: "client_id", value: Constants.accessKey),
             URLQueryItem(name: "client_secret", value: Constants.secretKey),
@@ -19,31 +27,40 @@ final class OAuth2Service{
             URLQueryItem(name: "code", value: code),
             URLQueryItem(name: "grant_type", value: "authorization_code")
         ]
-        guard let url = urlComponents.url else {return nil }
+        guard let url = urlComponents.url else { 
+            assertionFailure("[makeOAuthTokenRequest]: Failed to create URL")
+            return nil }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
         return urlRequest
     }
     
     func fetchOAuthToken(code: String, completition: @escaping (Result<String,Error>) -> Void){
-        let urlRequest = makeOAuthTokenRequest(code: code)
-        guard let urlRequest = urlRequest else { return}
-        let task = URLSession.shared.data(for: urlRequest){ result in
+        assert(Thread.isMainThread)
+        guard lastCode != code else {
+            print("[fetchOAuthToken]: AuthServiceError - invalidRequest")
+            completition(.failure(AuthServiceError.invalidRequest))
+            return
+        }
+        task?.cancel()
+        lastCode = code
+        guard let urlRequest = makeOAuthTokenRequest(code: code) else {
+            print("[fetchOAuthToken]: AuthServiceError - invalidRequest")
+            completition(.failure(AuthServiceError.invalidRequest))
+            return
+        }
+        let task = URLSession.shared.objectTask(for: urlRequest){ [weak self] (result: Result<OAuthTokenResponseBody,Error>) in
+            guard let self = self else {return }
             switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    completition(.success(response.accessToken))
-                    
-                } catch {
-                    completition(.failure(error))
-                    
-                }
+            case .success(let tokenBody):
+                let token = tokenBody.accessToken
+                completition(.success(token))
             case .failure(let error):
+                print("[fetchOAuthToken]: AuthServiceError - \(error)")
                 completition(.failure(error))
             }
-            
+            self.task = nil
+            self.lastCode = nil
         }
         task.resume()
     }

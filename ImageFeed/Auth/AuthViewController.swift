@@ -5,11 +5,11 @@
 //  Created by Александр  Сухинин on 24.02.2024.
 //
 
-
+import ProgressHUD
 import UIKit
 
 protocol AuthViewControllerDelegate: AnyObject{
-    func didAuthenticate(_ vc: AuthViewController)
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
 }
 
 final class AuthViewController: UIViewController {
@@ -23,7 +23,13 @@ final class AuthViewController: UIViewController {
         super.viewDidLoad()
         configureScreen()
     }
-    
+   
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = true
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = false
+    }
     private func configureScreen(){
         buildScreen()
         addSubViews()
@@ -43,7 +49,9 @@ final class AuthViewController: UIViewController {
         authButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
     @objc func buttonTapped(_ sender: Any){
-        self.performSegue(withIdentifier: ShowWebViewSegueIdentifier, sender: self)
+        let webViewController = WebViewViewController()
+        webViewController.delegate = self
+        navigationController?.pushViewController(webViewController, animated: true)
     }
     private func addSubViews(){
         view.addSubview(authImageView)
@@ -63,37 +71,18 @@ final class AuthViewController: UIViewController {
         ])
     }
     private func configureBackButton(){
+        navigationController?.navigationBar.backgroundColor = UIColor(named: "YPWhite")
         navigationController?.navigationBar.backIndicatorImage = UIImage(named: "backButton")
         navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "backButton")
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.backBarButtonItem?.tintColor = UIColor(named: "YPBlack")
     }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowWebViewSegueIdentifier {
-            guard
-                let webViewViewController = segue.destination as? WebViewViewController
-            else { fatalError("Failed to prepare for \(ShowWebViewSegueIdentifier)") }
-            webViewViewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
-    }
-
 }
 
 extension AuthViewController: WebViewViewControllerDelegate{
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         vc.dismiss(animated: true)
-        oauth2Service.fetchOAuthToken(code: code){ result in
-            switch result{
-            case .success(let token):
-                self.tokenStorage.token = token
-                self.delegate?.didAuthenticate(self)
-            case .failure(let error):
-                print(error)
-            }
-        }
+        self.delegate?.authViewController(self, didAuthenticateWithCode: code)
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {

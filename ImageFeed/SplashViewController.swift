@@ -12,6 +12,8 @@ final class SplashViewController: UIViewController {
     let imageView = UIImageView()
     let segueToAuthorization = "segueToAuthorization"
     let tokenStorage = OAuth2TokenStorage()
+    private let profileService = ProfileService.shared
+    private let profileimageService = ProfileImageService.shared
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -43,37 +45,76 @@ final class SplashViewController: UIViewController {
    
     func showSegue(){
         if let token = tokenStorage.token {
-            switchToTabBarController()
+            guard let token = tokenStorage.token else {return }
+            fetchProfile(token)
         }
         else {
-            self.performSegue(withIdentifier: segueToAuthorization, sender: self)
+            let authController = AuthViewController()
+            authController.delegate = self
+            let authNavigationController = UINavigationController(rootViewController: authController)
+            authNavigationController.modalPresentationStyle = .fullScreen
+            present(authNavigationController, animated: true)
         }
     }
 }
 
-
-extension SplashViewController{
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == segueToAuthorization {
-            guard
-                let navigationController = segue.destination as? UINavigationController,
-                let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else {
-                assertionFailure("Failed to prepare for \(segueToAuthorization)")
-                return
-            }
-            viewController.delegate = self
-        }
-        else{
-            super.prepare(for: segue, sender: sender)
-        }
-    }
-}
 
 extension SplashViewController: AuthViewControllerDelegate{
-    func didAuthenticate(_ vc: AuthViewController) {
-        vc.dismiss(animated: true)
-        switchToTabBarController()
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String){
+        UIBlockingProgressHUD.show()
+        dismiss(animated: true){ [weak self] in
+            guard let self = self else {return }
+            self.fetchOAuthToken(code)
+        }
     }
+    private func fetchOAuthToken(_ code: String){
+        OAuth2Service.shared.fetchOAuthToken(code: code) { [weak self] result in
+            guard let self = self else {return }
+            switch result {
+            case .success(let token):
+                self.tokenStorage.token = token
+                self.fetchProfile(token)
+                UIBlockingProgressHUD.dissmiss()
+            case .failure:
+                UIBlockingProgressHUD.dissmiss()
+                self.showAlert()
+            }
+        }
+    }
+   
+    private func fetchProfile(_ token: String){
+        UIBlockingProgressHUD.show()
+        profileService.fetchProfile(token){ [weak self] result in
+            UIBlockingProgressHUD.dissmiss()
+            guard let self = self else {
+                return}
+            switch result {
+            case .success(let profile):
+                self.fetchPhoto(profile.username)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    private func fetchPhoto(_ username: String){
+        UIBlockingProgressHUD.show()
+        profileimageService.fetchProfileImageURL(username: username){ [weak self ] result in
+            UIBlockingProgressHUD.dissmiss()
+            guard let self = self else { return}
+            switch result{
+            case .success:
+                self.switchToTabBarController()
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    private func showAlert(){
+        let errorAlert = UIAlertController(title: "Что-то пошло не так", message: "Не удалось войти в систему", preferredStyle: .alert)
+        errorAlert.addAction(UIAlertAction(title: "OK",style: .default, handler: nil ))
+        self.presentedViewController?.present(errorAlert,animated: true, completion: nil)
+        
+    }
+
 }
 
