@@ -9,21 +9,18 @@ import Foundation
 struct Photo {
     let id: String
     let size: CGSize
-    let createdAt: Date?
+    let createdAt: String?
     let welcomeDescription: String?
     let thumbImageURL: String
     let largeImageURL: String
     let isLiked: Bool
 }
 
-struct PhotoResultList: Codable{
-    var listPhotos: [PhotoResult]
-}
 struct PhotoResult: Codable{
     var id: String
     var width: Int
     var height: Int
-    var createdAt: Date?
+    var createdAt: String?
     var welcomeDescription: String?
     var isLiked: Bool
     var urls: [String: String]
@@ -61,7 +58,6 @@ final class ImageListService{
         urlRequest.httpMethod = "GET"
         urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return urlRequest
-        
     }
     
     func fetchPhotosNextPage(){
@@ -69,32 +65,37 @@ final class ImageListService{
         guard let token = tokenStorage.token else {return }
         if var task = task { return }
         guard let request = makePhotosRequest(token: token, page: nextPage) else {return}
-        //NOTE: Не парсятся данные скорее всего нужно  вызвать не objectTask потом развернуть или как-то декрдировать правильно потому что ругается на декодированте
-        let task = URLSession.shared.objectTask(for: request){ [weak self ] (result: Result<PhotoResultList,Error>) in
-            guard let self = self else {return}
+        let task = URLSession.shared.data(for: request){[weak self] (result: Result<Data,Error>) in
+            let decoder = JSONDecoder()
             var newPhotos: [Photo] = []
+            guard let self = self else {return }
             switch result{
-            case .success(let photoResults):
-                for photoResult in photoResults.listPhotos{
-                    let urls = photoResult.urls
-                    guard let full = urls["full"], let thumb = urls["thumb"] else {return }
-                    let urlResult = UrlResult(full: full , thumb: thumb)
-                    let photo = Photo(id: photoResult.id, size: CGSize(width: photoResult.width, height: photoResult.height), createdAt: photoResult.createdAt, welcomeDescription: photoResult.welcomeDescription, thumbImageURL: urlResult.thumb, largeImageURL: urlResult.full, isLiked: photoResult.isLiked)
-                    newPhotos.append(photo)
+            case .success(let data):
+                do {
+                    let photoResults = try decoder.decode([PhotoResult].self, from: data)
+                    print("AAAAAAAAAAA")
+                    for photoResult in photoResults{
+                        let urls = photoResult.urls
+                        guard let full = urls["full"], let thumb = urls["thumb"] else {return }
+                        let urlResult = UrlResult(full: full , thumb: thumb)
+                        let photo = Photo(id: photoResult.id, size: CGSize(width: photoResult.width, height: photoResult.height), createdAt: photoResult.createdAt, welcomeDescription: photoResult.welcomeDescription, thumbImageURL: urlResult.thumb, largeImageURL: urlResult.full, isLiked: photoResult.isLiked)
+                        newPhotos.append(photo)
+                    }
+                    self.photos.append(contentsOf: newPhotos)
+                    NotificationCenter.default.post(name: ImageListService.didChangeNotification,object: self)
+                    self.lastLoadedPage = nextPage
+                } catch{
+                    print("BBBBBBBBBB")
+                    print(error)
                 }
-                photos.append(contentsOf: newPhotos)
-                //TODO: Уведомление доделать
-                NotificationCenter.default.post(name: ImageListService.didChangeNotification,object: self)
-                lastLoadedPage = nextPage
+                print("ASCASDDASADASDASDADSSD",photos.count)
             case .failure(let error):
+                print("CCCCCCCCCCCCCCCCC")
                 print(error)
             }
             self.task = nil
         }
-        
         task.resume()
-        
-        
     }
     
     
