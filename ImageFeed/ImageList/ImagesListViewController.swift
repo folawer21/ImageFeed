@@ -38,10 +38,12 @@ class ImagesListViewController: UIViewController {
     }
     override func viewDidLoad(){
         super.viewDidLoad()
+        imageListService.fetchPhotosNextPage()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-        imageListServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main){ [weak self] _  in
+        imageListServiceObserver = NotificationCenter.default.addObserver(forName: ImageListService.didChangeNotification, object: nil, queue: .main){ [weak self] _  in
             guard let self = self else {return }
             self.updateTableViewAnimated()
+            print(photos.count)
         }
     }
     
@@ -73,13 +75,12 @@ class ImagesListViewController: UIViewController {
 
 extension ImagesListViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)-> CGFloat{
-        guard let image = UIImage(named: photosName[indexPath.row]) else {
-            return 0}
+        let photo = imageListService.photos[indexPath.row]
         let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
         let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
-        let imageWidth = image.size.width
+        let imageWidth = photo.size.width
         let scale = imageViewWidth / imageWidth
-        let cellHeight = image.size.height*scale + imageInsets.top + imageInsets.bottom
+        let cellHeight = photo.size.height*scale + imageInsets.top + imageInsets.bottom
         return cellHeight
     }
     
@@ -87,7 +88,7 @@ extension ImagesListViewController: UITableViewDelegate{
            performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
        }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == (photos.count - 1) {
+        if indexPath.row == (imageListService.photos.count - 1) {
             imageListService.fetchPhotosNextPage()
         }
     }
@@ -95,12 +96,11 @@ extension ImagesListViewController: UITableViewDelegate{
 
 extension ImagesListViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photos.count
+        return imageListService.photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
-        print(4444)
         guard let imageListCell = cell as? ImagesListCell else {
             print("Cannot convert to ImageListCell")
             return UITableViewCell()
