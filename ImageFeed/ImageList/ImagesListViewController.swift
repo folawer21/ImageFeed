@@ -33,7 +33,8 @@ class ImagesListViewController: UIViewController {
         }
         cell.imageCell.kf.indicatorType = .activity
         cell.dateLabel.text = photo.createdAt
-        let likedImage = photo.isLiked ? UIImage(named:"likedOn") : UIImage(named: "likedOff")
+//        let likedImage = photo.isLiked ? UIImage(named:"likedOn") : UIImage(named: "likedOff")
+        let likedImage = UIImage(named:"likedOn")
         cell.likeButton.setImage(likedImage, for: .normal)
     }
     override func viewDidLoad(){
@@ -43,7 +44,6 @@ class ImagesListViewController: UIViewController {
         imageListServiceObserver = NotificationCenter.default.addObserver(forName: ImageListService.didChangeNotification, object: nil, queue: .main){ [weak self] _  in
             guard let self = self else {return }
             self.updateTableViewAnimated()
-            print(photos.count)
         }
     }
     

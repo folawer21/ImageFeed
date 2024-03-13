@@ -88,7 +88,6 @@ final class ImageListService{
                     print("BBBBBBBBBB")
                     print(error)
                 }
-                print("ASCASDDASADASDASDADSSD",photos.count)
             case .failure(let error):
                 print("CCCCCCCCCCCCCCCCC")
                 print(error)
@@ -97,6 +96,51 @@ final class ImageListService{
         }
         task.resume()
     }
-    
-    
+}
+
+extension ImageListService: ImageListCellDelegate{
+    func likeButtonService(id: String, isLike: Bool,_ completion: @escaping (Result<Void,Error>) -> Void ){
+        let urlString = "https://api.unsplash.com/photos/\(id)/like"
+        guard let url = URL(string: urlString) else {
+            print("Error with URL")
+            return }
+        var request = URLRequest(url: url)
+        if isLike{
+            request.httpMethod = "DELETE"
+        }
+        else{
+            request.httpMethod = "POST"
+        }
+        
+        let task = URLSession.shared.data(for: request) { [weak self] (result: Result<Data,Error>) in
+            guard let self = self else {return }
+            switch result{
+            case .success(let data):
+                let decoder = JSONDecoder()
+                do{
+                    //TODO: custom Photo init(from: PhotoResult)
+                    let photoResult = try decoder.decode(PhotoResult.self, from: data)
+                    let urls = photoResult.urls
+                    guard let full = urls["full"], let thumb = urls["thumb"] else {return }
+                    let urlResult = UrlResult(full: full , thumb: thumb)
+                    let photo = Photo(id: photoResult.id, size: CGSize(width: photoResult.width, height: photoResult.height), createdAt: photoResult.createdAt, welcomeDescription: photoResult.welcomeDescription, thumbImageURL: urlResult.thumb, largeImageURL: urlResult.full, isLiked: photoResult.isLiked)
+                    guard let index = self.photos.firstIndex(where: { $0.id == photo.id}) else {
+                        print("Error with getting index while likeTapping )")
+                        return
+                    }
+                    DispatchQueue.main.async{
+                        self.photos[index] = photo
+                    }
+                    completion(.success(Void()))
+                }catch {
+                    print("Error while decoding likeResponse : \(error)")
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                print("Error with likeButton request: \(error)")
+                completion(.failure(error))
+            }
+        }
+        task.resume()
+    }
 }
