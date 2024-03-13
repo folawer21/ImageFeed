@@ -96,9 +96,6 @@ final class ImageListService{
         }
         task.resume()
     }
-}
-
-extension ImageListService: ImageListCellDelegate{
     func likeButtonService(id: String, isLike: Bool,_ completion: @escaping (Result<Void,Error>) -> Void ){
         let urlString = "https://api.unsplash.com/photos/\(id)/like"
         guard let url = URL(string: urlString) else {
@@ -144,3 +141,4 @@ extension ImageListService: ImageListCellDelegate{
         task.resume()
     }
 }
+

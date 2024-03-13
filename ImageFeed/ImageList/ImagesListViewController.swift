@@ -26,16 +26,20 @@ class ImagesListViewController: UIViewController {
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath){
         let photo = photos[indexPath.row]
         let urlString = photo.thumbImageURL
-        let url = URL(string:urlString)
-        cell.imageCell.kf.setImage(with: url) { [weak self] _ in
-            guard let self = self else {return}
-            self.tableView.reloadRows(at: [indexPath], with: .automatic)
-        }
-        cell.imageCell.kf.indicatorType = .activity
-        cell.dateLabel.text = photo.createdAt
-//        let likedImage = photo.isLiked ? UIImage(named:"likedOn") : UIImage(named: "likedOff")
-        let likedImage = UIImage(named:"likedOn")
-        cell.likeButton.setImage(likedImage, for: .normal)
+        guard let url = URL(string:urlString) else {return }
+        let isLiked = photo.isLiked
+        guard let date = photo.createdAt else {return }
+        cell.configCell(photoUrl: url, isLiked: isLiked, date: date)
+//        cell.imageCell.kf.setImage(with: url) { [weak self] _ in
+//            guard let self = self else {return}
+//            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+//        }
+//        cell.imageCell.kf.indicatorType = .activity
+//        cell.dateLabel.text = photo.createdAt
+//       let likedImage = photo.isLiked ? UIImage(named:"likedOn") : UIImage(named: "likedOff")
+//        let likedImage = UIImage(named:"likedOn")
+//        cell.likeButton.setImage(likedImage, for: .normal)
+        
     }
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -109,6 +113,15 @@ extension ImagesListViewController: UITableViewDataSource{
         return imageListCell
         
     }
+    
+}
+
+extension ImagesListViewController: ImageListCellDelegate{
+    
+    func likeButtontapped(cell: UITableViewCell) {
+        
+    }
+    
     
 }
 
