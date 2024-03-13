@@ -34,6 +34,15 @@ struct PhotoResult: Codable{
         case urls = "urls"
     }
 }
+
+struct LikeResult: Codable{
+    var photoResult: PhotoResult
+    enum CodingKeys: String,CodingKey{
+        case photoResult = "photo"
+    }
+}
+
+
 struct UrlResult{
     var full: String
     var thumb: String
@@ -108,6 +117,8 @@ final class ImageListService{
         else{
             request.httpMethod = "POST"
         }
+        guard let token = tokenStorage.token else {return }
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         let task = URLSession.shared.data(for: request) { [weak self] (result: Result<Data,Error>) in
             guard let self = self else {return }
@@ -116,7 +127,8 @@ final class ImageListService{
                 let decoder = JSONDecoder()
                 do{
                     //TODO: custom Photo init(from: PhotoResult)
-                    let photoResult = try decoder.decode(PhotoResult.self, from: data)
+                    let likeResult = try decoder.decode(LikeResult.self, from: data)
+                    let photoResult = likeResult.photoResult
                     let urls = photoResult.urls
                     guard let full = urls["full"], let thumb = urls["thumb"] else {return }
                     let urlResult = UrlResult(full: full , thumb: thumb)

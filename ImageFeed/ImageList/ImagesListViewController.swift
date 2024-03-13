@@ -30,15 +30,7 @@ class ImagesListViewController: UIViewController {
         let isLiked = photo.isLiked
         guard let date = photo.createdAt else {return }
         cell.configCell(photoUrl: url, isLiked: isLiked, date: date)
-//        cell.imageCell.kf.setImage(with: url) { [weak self] _ in
-//            guard let self = self else {return}
-//            self.tableView.reloadRows(at: [indexPath], with: .automatic)
-//        }
-//        cell.imageCell.kf.indicatorType = .activity
-//        cell.dateLabel.text = photo.createdAt
-//       let likedImage = photo.isLiked ? UIImage(named:"likedOn") : UIImage(named: "likedOff")
-//        let likedImage = UIImage(named:"likedOn")
-//        cell.likeButton.setImage(likedImage, for: .normal)
+        cell.delegate = self
         
     }
     override func viewDidLoad(){
@@ -117,9 +109,23 @@ extension ImagesListViewController: UITableViewDataSource{
 }
 
 extension ImagesListViewController: ImageListCellDelegate{
-    
-    func likeButtontapped(cell: UITableViewCell) {
-        
+    func likeButtontapped(cell: ImagesListCell) {
+        cell.setButtonAvailability(false)
+        guard let indexPath = self.tableView.indexPath(for: cell) else{ return }
+        let photo = imageListService.photos[indexPath.row]
+        let isLiked = photo.isLiked
+        let id = photo.id
+        imageListService.likeButtonService(id: id, isLike: isLiked){ result in
+            DispatchQueue.main.async{
+                switch result{
+                case .success:
+                    cell.changeLikeImage(!isLiked)
+                case .failure(let error):
+                    print(error)
+                }
+                cell.setButtonAvailability(true)
+            }
+        }
     }
     
     
