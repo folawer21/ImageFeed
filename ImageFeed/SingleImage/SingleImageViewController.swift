@@ -21,6 +21,7 @@ final class SingleImageViewController: UIViewController{
         let share = UIActivityViewController(activityItems:[image] , applicationActivities: nil)
         present(share,animated: true, completion: nil)
     }
+    
     var image: UIImage? {
         didSet {
             guard isViewLoaded else { return }

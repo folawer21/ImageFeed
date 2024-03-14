@@ -11,6 +11,7 @@ protocol ImageListCellDelegate: AnyObject{
     func likeButtontapped(cell: ImagesListCell)
 }
 
+
 final class ImagesListCell: UITableViewCell{
     static let reuseIdentifier = "ImagesListCell"
     weak var delegate: ImageListCellDelegate?
@@ -20,9 +21,11 @@ final class ImagesListCell: UITableViewCell{
     @IBAction func likTapped(_ sender: Any) {
         delegate?.likeButtontapped(cell: self)
     }
+    
     func setButtonAvailability(_ flag:Bool){
         likeButton.isEnabled = flag
     }
+    
     func changeLikeImage(_ flag: Bool){
         if flag{
             self.likeButton.setImage(UIImage(named: "likeOn"), for: .normal)

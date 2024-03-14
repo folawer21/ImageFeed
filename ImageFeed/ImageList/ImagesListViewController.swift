@@ -43,17 +43,17 @@ class ImagesListViewController: UIViewController {
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowSingleImageSegueIdentifier {
-            let viewController = segue.destination as! SingleImageViewController
-            let indexPath = sender as! IndexPath
-            let image = UIImage(named: photosName[indexPath.row])
-            viewController.image = image
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
-    }
-    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == ShowSingleImageSegueIdentifier {
+//            let viewController = segue.destination as! SingleImageViewController
+//            let indexPath = sender as! IndexPath
+//            let image = UIImage(named: photosName[indexPath.row])
+//            viewController.image = image
+//        } else {
+//            super.prepare(for: segue, sender: sender)
+//        }
+//    }
+//    
     private func updateTableViewAnimated(){
         let oldCount = photos.count
         let newCount = imageListService.photos.count
@@ -81,7 +81,12 @@ extension ImagesListViewController: UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-           performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
+        let singleImageController  = SingleImageViewControllerCode()
+        guard let url = URL(string:photos[indexPath.row].largeImageURL) else {return }
+        singleImageController.url = url
+        singleImageController.modalPresentationStyle = .fullScreen
+        show(singleImageController, sender: self)
+//           performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
        }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == (imageListService.photos.count - 1) {
