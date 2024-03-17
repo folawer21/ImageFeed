@@ -41,7 +41,9 @@ final class ImagesListCell: UITableViewCell{
         }else{
             self.likeButton.setImage(UIImage(named: "likeOff"), for: .normal)
         }
-        imageCell.kf.setImage(with: url)
+        let placeholderImage = UIImage(named: "Stub")
+        
+        imageCell.kf.setImage(with: url,placeholder: placeholderImage)
         imageCell.kf.indicatorType = .activity
     }
     

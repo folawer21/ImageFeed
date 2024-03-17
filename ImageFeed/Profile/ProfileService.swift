@@ -53,7 +53,10 @@ final class ProfileService{
         urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return urlRequest
     }
-    
+    func setNilProfile(){
+        profile = nil
+        
+    }
     func fetchProfile(_ token:String, completion: @escaping(Result<Profile,Error>) -> Void){
         //TODO: новые ошибки
         guard lastToken != token else {

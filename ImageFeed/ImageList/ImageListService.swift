@@ -55,6 +55,12 @@ final class ImageListService{
     private let perPage = 10
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
+    
+    func setPhotosNil(){
+        photos.removeAll()
+        lastLoadedPage = nil
+    }
+    
     func makePhotosRequest(token: String,page: Int) -> URLRequest?{
         var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")
         urlComponents?.queryItems = [

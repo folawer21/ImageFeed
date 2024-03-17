@@ -36,6 +36,10 @@ final class ProfileImageService{
         return urlRequest
     }
     
+    func setNilUrl(){
+        avatarURL = nil
+    }
+    
     func fetchProfileImageURL(username: String, completion: @escaping (Result<String,Error>) -> Void){
         guard lastUsername != username else {
             print("[fetchProfileImageURL]: ProfileImageServiceError - lastUsername == username ")

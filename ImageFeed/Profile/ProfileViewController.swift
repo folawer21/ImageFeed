@@ -7,9 +7,10 @@ class ProfileViewController: UIViewController {
     private lazy var nicknameLabel = UILabel()
     private lazy var  descriptionLabel = UILabel()
     private lazy var profileService = ProfileService.shared
+    private lazy var logoutService = ProfileLogoutService.shared
     private lazy var tokenStorage = OAuth2TokenStorage()
     private var profileImageServiceObserver: NSObjectProtocol?
-    private  var exitButton = UIButton.systemButton(with: UIImage(named: "exitButton")!, target: self, action: nil)
+    private  var exitButton = UIButton.systemButton(with: UIImage(named: "exitButton")!, target: self, action: #selector(exitButtonTapped))
     override func viewDidLoad() {
         super.viewDidLoad()
         configureScreen()
@@ -40,7 +41,10 @@ class ProfileViewController: UIViewController {
         addSubViews()
         activateConstraints()
     }
-    
+    @objc
+    private func exitButtonTapped(){
+        logoutService.logout()
+    }
     func buildScreen(){
         self.view.backgroundColor = UIColor(named: "YPBlack")
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
