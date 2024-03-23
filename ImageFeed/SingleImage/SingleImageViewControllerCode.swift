@@ -8,7 +8,6 @@
 import UIKit
 import Kingfisher
 
-
 final class SingleImageViewControllerCode: UIViewController{
     private lazy var scrollView: UIScrollView = UIScrollView()
     private lazy var imageView: UIImageView = UIImageView()
@@ -25,7 +24,6 @@ final class SingleImageViewControllerCode: UIViewController{
     }
     var url : URL?
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureScreen()
@@ -37,8 +35,8 @@ final class SingleImageViewControllerCode: UIViewController{
         buildScreen()
         addSubViews()
         activateConstraits()
-
     }
+    
     private func buildScreen(){
         UIBlockingProgressHUD.show()
         imageView.kf.setImage(with: url){ [weak self] result in
@@ -66,15 +64,16 @@ final class SingleImageViewControllerCode: UIViewController{
         shareButton.setImage(UIImage(named: "shareButton"), for: .normal)
         shareButton.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
     }
+    
     @objc func backButtonTapped(_ sender: Any){
         dismiss(animated:true,completion: nil)
     }
+    
     @objc func shareButtonTapped(_ sender: Any){
         guard let image = imageView.image else {return }
         let share = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         present(share,animated: true,completion: nil)
     }
-    
     
     private func addSubViews(){
         view.addSubview(scrollView)
