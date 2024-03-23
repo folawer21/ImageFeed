@@ -43,7 +43,12 @@ class ProfileViewController: UIViewController {
     }
     @objc
     private func exitButtonTapped(){
-        logoutService.logout()
+        let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Да", style: .default){ _ in
+            self.logoutService.logout()
+        })
+        alert.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     func buildScreen(){
         self.view.backgroundColor = UIColor(named: "YPBlack")
