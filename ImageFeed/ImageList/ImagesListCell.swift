@@ -15,6 +15,13 @@ protocol ImageListCellDelegate: AnyObject{
 final class ImagesListCell: UITableViewCell{
     static let reuseIdentifier = "ImagesListCell"
     weak var delegate: ImageListCellDelegate?
+    private lazy var  dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
+    }()
+    
     @IBOutlet var imageCell: UIImageView!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
@@ -34,8 +41,12 @@ final class ImagesListCell: UITableViewCell{
         }
     }
     
-    func configCell(photoUrl url: URL, isLiked: Bool,date: String){
-        self.dateLabel.text = date
+    func configCell(photoUrl url: URL, isLiked: Bool,date: Date?){
+        if let date = date {
+            self.dateLabel.text = dateFormatter.string(from: date)
+        } else {
+            self.dateLabel.text = ""
+        }
         if isLiked{
             self.likeButton.setImage(UIImage(named: "likeOn"), for: .normal)
         }else{

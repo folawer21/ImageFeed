@@ -9,7 +9,7 @@ import Foundation
 struct Photo {
     let id: String
     let size: CGSize
-    let createdAt: String?
+    let createdAt: Date?
     let welcomeDescription: String?
     let thumbImageURL: String
     let largeImageURL: String
@@ -20,7 +20,7 @@ struct PhotoResult: Codable{
     var id: String
     var width: Int
     var height: Int
-    var createdAt: String?
+    var createdAt: String
     var welcomeDescription: String?
     var isLiked: Bool
     var urls: [String: String]
@@ -52,6 +52,7 @@ final class ImageListService{
     private (set) var photos: [Photo] = []
     private var task: URLSessionTask?
     private let tokenStorage = OAuth2TokenStorage()
+    private let dateFormatter = ISO8601DateFormatter()
     private let perPage = 10
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
@@ -87,24 +88,23 @@ final class ImageListService{
             case .success(let data):
                 do {
                     let photoResults = try decoder.decode([PhotoResult].self, from: data)
-                    print("AAAAAAAAAAA")
                     for photoResult in photoResults{
                         let urls = photoResult.urls
                         guard let full = urls["full"], let thumb = urls["thumb"] else {return }
                         let urlResult = UrlResult(full: full , thumb: thumb)
-                        let photo = Photo(id: photoResult.id, size: CGSize(width: photoResult.width, height: photoResult.height), createdAt: photoResult.createdAt, welcomeDescription: photoResult.welcomeDescription, thumbImageURL: urlResult.thumb, largeImageURL: urlResult.full, isLiked: photoResult.isLiked)
+                        let createdAt = photoResult.createdAt
+                        let date = dateFormatter.date(from: createdAt)
+                        let photo = Photo(id: photoResult.id, size: CGSize(width: photoResult.width, height: photoResult.height), createdAt: date, welcomeDescription: photoResult.welcomeDescription, thumbImageURL: urlResult.thumb, largeImageURL: urlResult.full, isLiked: photoResult.isLiked)
                         newPhotos.append(photo)
                     }
                     self.photos.append(contentsOf: newPhotos)
                     NotificationCenter.default.post(name: ImageListService.didChangeNotification,object: self)
                     self.lastLoadedPage = nextPage
                 } catch{
-                    print("BBBBBBBBBB")
-                    print(error)
+                    print("ImageListService fetchPhotosNextPage: decoder's problem \(error)")
                 }
             case .failure(let error):
-                print("CCCCCCCCCCCCCCCCC")
-                print(error)
+                print("ImageListService fetchPhotosNextPage:  \(error)")
             }
             self.task = nil
         }
@@ -114,7 +114,7 @@ final class ImageListService{
     func likeButtonService(id: String, isLike: Bool,_ completion: @escaping (Result<Void,Error>) -> Void ){
         let urlString = "https://api.unsplash.com/photos/\(id)/like"
         guard let url = URL(string: urlString) else {
-            print("Error with URL")
+            print("ImageListService likeButtonService:  Error with URL")
             return }
         var request = URLRequest(url: url)
         if isLike{
@@ -138,9 +138,11 @@ final class ImageListService{
                     let urls = photoResult.urls
                     guard let full = urls["full"], let thumb = urls["thumb"] else {return }
                     let urlResult = UrlResult(full: full , thumb: thumb)
-                    let photo = Photo(id: photoResult.id, size: CGSize(width: photoResult.width, height: photoResult.height), createdAt: photoResult.createdAt, welcomeDescription: photoResult.welcomeDescription, thumbImageURL: urlResult.thumb, largeImageURL: urlResult.full, isLiked: photoResult.isLiked)
+                    let createdAt = photoResult.createdAt
+                    let date = dateFormatter.date(from: createdAt)
+                    let photo = Photo(id: photoResult.id, size: CGSize(width: photoResult.width, height: photoResult.height), createdAt: date, welcomeDescription: photoResult.welcomeDescription, thumbImageURL: urlResult.thumb, largeImageURL: urlResult.full, isLiked: photoResult.isLiked)
                     guard let index = self.photos.firstIndex(where: { $0.id == photo.id}) else {
-                        print("Error with getting index while likeTapping )")
+                        print("ImageListService likeButtonService: Error with getting index while likeTappin")
                         return
                     }
                     DispatchQueue.main.async{
@@ -148,11 +150,11 @@ final class ImageListService{
                     }
                     completion(.success(Void()))
                 }catch {
-                    print("Error while decoding likeResponse : \(error)")
+                    print("ImageListService likeButtonService: Error while decoding likeResponse  \(error)")
                     completion(.failure(error))
                 }
             case .failure(let error):
-                print("Error with likeButton request: \(error)")
+                print("ImageListService likeButtonService: Error with likeButton request: \(error)")
                 completion(.failure(error))
             }
         }
