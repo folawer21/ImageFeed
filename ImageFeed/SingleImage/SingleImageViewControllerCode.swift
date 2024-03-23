@@ -14,19 +14,31 @@ final class SingleImageViewControllerCode: UIViewController{
     private lazy var imageView: UIImageView = UIImageView()
     private lazy var shareButton: UIButton = UIButton()
     private lazy var backButton: UIButton = UIButton()
+    private var image: UIImage? {
+        didSet {
+            guard isViewLoaded else {return }
+            imageView.image = image
+            if let newimage = image {
+                rescaleAndCenterImageInScrollView(image: newimage)
+            }
+        }
+    }
     var url : URL?
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureScreen()
+        scrollView.delegate = self
+        scrollView.minimumZoomScale = 0.1
+        scrollView.maximumZoomScale = 1.25
+    }
+    private func configureScreen(){
         buildScreen()
         addSubViews()
         activateConstraits()
-        scrollView.minimumZoomScale = 0.1
-        scrollView.maximumZoomScale = 1.25
-        if let image = imageView.image { rescaleAndCenterImageInScrollView(image: image)}
+
     }
-    
     private func buildScreen(){
         UIBlockingProgressHUD.show()
         imageView.kf.setImage(with: url){ [weak self] result in
@@ -34,7 +46,8 @@ final class SingleImageViewControllerCode: UIViewController{
             guard let self = self else {return}
             switch result {
             case .success(let imageResult):
-                rescaleAndCenterImageInScrollView(image: imageResult.image)
+                self.imageView.contentMode  = .scaleAspectFill
+                rescaleAndCenterImageInScrollView(image: self.imageView.image!)
             case .failure:
                 self.showError()
             }
@@ -72,7 +85,6 @@ final class SingleImageViewControllerCode: UIViewController{
     
     private func activateConstraits(){
         NSLayoutConstraint.activate([
-            //TODO: Maybe change view to scrollView
             imageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
@@ -121,8 +133,8 @@ final class SingleImageViewControllerCode: UIViewController{
         scrollView.setZoomScale(scale, animated: false)
         scrollView.layoutIfNeeded()
         let newContentSize = scrollView.contentSize
-        let x = (newContentSize.width - visibleRectSize.width)/2
-        let y = (newContentSize.height - visibleRectSize.height)/2
+        let x = (newContentSize.width - visibleRectSize.width) / 2
+        let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x:x,y:y), animated: false)
         
     }
