@@ -25,6 +25,7 @@
 		3E1C06B62B4C336700847970 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E1C06B42B4C336700847970 /* LaunchScreen.storyboard */; };
 		3E58E78C2B6D42860078CF86 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E78B2B6D42860078CF86 /* ProfileViewController.swift */; };
 		3E7F5EA52BA5E3B30018BCEF /* ProfileLogoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7F5EA42BA5E3B30018BCEF /* ProfileLogoutService.swift */; };
+		3E7F5ED72BB0D1270018BCEF /* ProfileServiceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7F5ED62BB0D1270018BCEF /* ProfileServiceModels.swift */; };
 		3E8263202B93437200456D31 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 3E82631F2B93437200456D31 /* ProgressHUD */; };
 		3E8263222B93E8DC00456D31 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8263212B93E8DC00456D31 /* UIBlockingProgressHUD.swift */; };
 		3E8263242B948BDE00456D31 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8263232B948BDE00456D31 /* ProfileService.swift */; };
@@ -69,6 +70,7 @@
 		3E1C06B72B4C336700847970 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3E58E78B2B6D42860078CF86 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		3E7F5EA42BA5E3B30018BCEF /* ProfileLogoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileLogoutService.swift; sourceTree = "<group>"; };
+		3E7F5ED62BB0D1270018BCEF /* ProfileServiceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceModels.swift; sourceTree = "<group>"; };
 		3E8263212B93E8DC00456D31 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 		3E8263232B948BDE00456D31 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		3E8263252B94E37500456D31 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				3E58E78B2B6D42860078CF86 /* ProfileViewController.swift */,
 				3E8263232B948BDE00456D31 /* ProfileService.swift */,
 				3E8263252B94E37500456D31 /* ProfileImageService.swift */,
+				3E7F5ED62BB0D1270018BCEF /* ProfileServiceModels.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 				3E032A4D2B88DAE900C37257 /* Constants.swift in Sources */,
 				3EA4DCD12B7408C6001AB0F8 /* SingleImageViewController.swift in Sources */,
 				3E8263262B94E37500456D31 /* ProfileImageService.swift in Sources */,
+				3E7F5ED72BB0D1270018BCEF /* ProfileServiceModels.swift in Sources */,
 				3E032A562B8A545200C37257 /* WebViewViewControllerDelegate.swift in Sources */,
 				3E1C06AC2B4C336600847970 /* SceneDelegate.swift in Sources */,
 			);

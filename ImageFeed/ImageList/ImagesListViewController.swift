@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class ImagesListViewController: UIViewController {
+final class ImagesListViewController: UIViewController {
     @IBOutlet private var tableView: UITableView!
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private let photosName: [String] = Array(0..<20).map{"\($0)"}
@@ -42,18 +42,7 @@ class ImagesListViewController: UIViewController {
             self.updateTableViewAnimated()
         }
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == ShowSingleImageSegueIdentifier {
-//            let viewController = segue.destination as! SingleImageViewController
-//            let indexPath = sender as! IndexPath
-//            let image = UIImage(named: photosName[indexPath.row])
-//            viewController.image = image
-//        } else {
-//            super.prepare(for: segue, sender: sender)
-//        }
-//    }
-//    
+
     private func updateTableViewAnimated(){
         let oldCount = photos.count
         let newCount = imageListService.photos.count

@@ -4,8 +4,6 @@
 //
 //  Created by Александр  Сухинин on 24.02.2024.
 //
-
-import ProgressHUD
 import UIKit
 
 protocol AuthViewControllerDelegate: AnyObject{
@@ -48,7 +46,7 @@ final class AuthViewController: UIViewController {
         authButton.layer.masksToBounds = true
         authButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
-    @objc func buttonTapped(_ sender: Any){
+    @objc private func buttonTapped(_ sender: Any){
         let webViewController = WebViewViewController()
         webViewController.delegate = self
         navigationController?.pushViewController(webViewController, animated: true)
@@ -79,6 +77,7 @@ final class AuthViewController: UIViewController {
     }
 }
 
+// MARK: - WebViewViewControllerDelegate
 extension AuthViewController: WebViewViewControllerDelegate{
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         vc.dismiss(animated: true)

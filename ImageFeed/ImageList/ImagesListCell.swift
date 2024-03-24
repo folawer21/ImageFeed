@@ -4,13 +4,12 @@
 //
 //  Created by Александр  Сухинин on 09.01.2024.
 //
-import UIKit
 import Kingfisher
+import UIKit
 
 protocol ImageListCellDelegate: AnyObject{
     func likeButtontapped(cell: ImagesListCell)
 }
-
 
 final class ImagesListCell: UITableViewCell{
     static let reuseIdentifier = "ImagesListCell"
@@ -40,20 +39,11 @@ final class ImagesListCell: UITableViewCell{
             self.likeButton.setImage(UIImage(named: "likeOff"), for: .normal)
         }
     }
-    
+
     func configCell(photoUrl url: URL, isLiked: Bool,date: Date?){
-        if let date = date {
-            self.dateLabel.text = dateFormatter.string(from: date)
-        } else {
-            self.dateLabel.text = ""
-        }
-        if isLiked{
-            self.likeButton.setImage(UIImage(named: "likeOn"), for: .normal)
-        }else{
-            self.likeButton.setImage(UIImage(named: "likeOff"), for: .normal)
-        }
+        self.dateLabel.text = date != nil ? dateFormatter.string(from: date!) : ""
+        self.likeButton.setImage(UIImage(named: isLiked ? "likeOn" : "likeOff"), for: .normal)
         let placeholderImage = UIImage(named: "Stub")
-        
         imageCell.kf.setImage(with: url,placeholder: placeholderImage)
         imageCell.kf.indicatorType = .activity
     }
