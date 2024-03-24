@@ -20,7 +20,7 @@ struct PhotoResult: Codable{
     var id: String
     var width: Int
     var height: Int
-    var createdAt: String
+    var createdAt: String?
     var welcomeDescription: String?
     var isLiked: Bool
     var urls: [String: String]
@@ -93,7 +93,12 @@ final class ImageListService{
                         guard let full = urls["full"], let thumb = urls["thumb"] else {return }
                         let urlResult = UrlResult(full: full , thumb: thumb)
                         let createdAt = photoResult.createdAt
-                        let date = dateFormatter.date(from: createdAt)
+                        let date: Date?
+                        if let createdAt = createdAt {
+                            date = dateFormatter.date(from: createdAt)
+                        }else {
+                            date = nil
+                        }
                         let photo = Photo(id: photoResult.id, size: CGSize(width: photoResult.width, height: photoResult.height), createdAt: date, welcomeDescription: photoResult.welcomeDescription, thumbImageURL: urlResult.thumb, largeImageURL: urlResult.full, isLiked: photoResult.isLiked)
                         newPhotos.append(photo)
                     }
@@ -139,7 +144,12 @@ final class ImageListService{
                     guard let full = urls["full"], let thumb = urls["thumb"] else {return }
                     let urlResult = UrlResult(full: full , thumb: thumb)
                     let createdAt = photoResult.createdAt
-                    let date = dateFormatter.date(from: createdAt)
+                    let date: Date?
+                    if let createdAt = createdAt {
+                        date = dateFormatter.date(from: createdAt)
+                    } else {
+                        date = nil
+                    }
                     let photo = Photo(id: photoResult.id, size: CGSize(width: photoResult.width, height: photoResult.height), createdAt: date, welcomeDescription: photoResult.welcomeDescription, thumbImageURL: urlResult.thumb, largeImageURL: urlResult.full, isLiked: photoResult.isLiked)
                     guard let index = self.photos.firstIndex(where: { $0.id == photo.id}) else {
                         print("ImageListService likeButtonService: Error with getting index while likeTappin")

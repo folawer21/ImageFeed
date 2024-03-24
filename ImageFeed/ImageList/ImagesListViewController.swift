@@ -28,7 +28,7 @@ class ImagesListViewController: UIViewController {
         let urlString = photo.thumbImageURL
         guard let url = URL(string:urlString) else {return }
         let isLiked = photo.isLiked
-        guard let date = photo.createdAt else {return }
+        let date = photo.createdAt
         cell.configCell(photoUrl: url, isLiked: isLiked, date: date)
         cell.delegate = self
         

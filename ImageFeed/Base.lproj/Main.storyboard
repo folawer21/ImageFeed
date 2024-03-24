@@ -30,7 +30,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="224"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="77w-we-OG3" userLabel="imageCell">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="77w-we-OG3" userLabel="imageCell">
                                                     <rect key="frame" x="16" y="4" width="361" height="216"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -136,7 +136,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="0" width="200" height="132"/>
         <image name="likeOn" width="42" height="42"/>
         <image name="tabBarItem:TYr-4u-7hx:image" width="30" height="30">
             <mutableData key="keyedArchiveRepresentation">

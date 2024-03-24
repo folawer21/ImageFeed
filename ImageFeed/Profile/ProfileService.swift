@@ -13,7 +13,7 @@ enum ProfileServiceError:Error {
 struct ProfileResult: Codable{
     var username: String
     var firstName: String
-    var lastName: String
+    var lastName: String?
     var bio: String?
     enum CodingKeys:String,CodingKey{
         case username = "username"
@@ -58,7 +58,6 @@ final class ProfileService{
         
     }
     func fetchProfile(_ token:String, completion: @escaping(Result<Profile,Error>) -> Void){
-        //TODO: новые ошибки
         guard lastToken != token else {
             print("[fetchProfile]: ProfileServiceError - lastToken == token")
             completion(.failure(ProfileServiceError.invalidRequest))
@@ -75,7 +74,7 @@ final class ProfileService{
             guard let self = self else {return}
             switch result {
             case .success(let profileResult):
-                let profile = Profile(username: profileResult.username, firstName: profileResult.firstName, lastName: profileResult.lastName, bio: profileResult.bio)
+                let profile = Profile(username: profileResult.username, firstName: profileResult.firstName, lastName: profileResult.lastName ?? "", bio: profileResult.bio)
                 self.profile = profile
                 completion(.success(profile))
             case .failure(let error):
