@@ -1,37 +1,44 @@
 import UIKit
 import Kingfisher
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
+  
+    
     private lazy var profileImageView = UIImageView()
     private lazy var nameLabel = UILabel()
     private lazy var nicknameLabel = UILabel()
     private lazy var  descriptionLabel = UILabel()
-    private lazy var profileService = ProfileService.shared
-    private lazy var logoutService = ProfileLogoutService.shared
+//    private lazy var profileService = ProfileService.shared
+//    private lazy var logoutService = ProfileLogoutService.shared
+    var presenter: ProfilePresenterProtocol?
     private lazy var tokenStorage = OAuth2TokenStorage()
     private var profileImageServiceObserver: NSObjectProtocol?
     private  var exitButton = UIButton.systemButton(with: UIImage(named: "exitButton")!, target: self, action: #selector(exitButtonTapped))
     override func viewDidLoad() {
         super.viewDidLoad()
         configureScreen()
-        loadProfileData()
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.didChangeNotification, object: nil, queue: .main){ [weak self] _ in
-                guard let self = self else {return }
-                self.updateAvatar()
-            }
-        updateAvatar()
+        setProfileData()
+        setObserver()
+//        profileImageServiceObserver = NotificationCenter.default.addObserver(
+//            forName: ProfileImageService.didChangeNotification, object: nil, queue: .main){ [weak self] _ in
+//                guard let self = self else {return }
+//                self.updateAvatar()
+//            }
+//        updateAvatar()
     }
-    private func updateAvatar(){
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else {return}
+    func updateAvatar(with url: URL){
+//        guard
+//            let profileImageURL = ProfileImageService.shared.avatarURL,
+//            let url = URL(string: profileImageURL)
+//        else {return}
         let processor = RoundCornerImageProcessor(cornerRadius: 32)
         profileImageView.kf.setImage(with: url,options: [.processor(processor)])
     }
-    func loadProfileData(){
-        guard let profile = profileService.profile else {return}
+    func setObserver(){
+        presenter?.setObserverForViewController()
+    }
+    func setProfileData(){
+        guard let profile = presenter?.getProfile() else {return}
         self.nameLabel.text = profile.name
         self.nicknameLabel.text = profile.loginName
         self.descriptionLabel.text = profile.bio
@@ -45,11 +52,12 @@ class ProfileViewController: UIViewController {
     private func exitButtonTapped(){
         let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Да", style: .default){ _ in
-            self.logoutService.logout()
+            self.presenter?.exitAccount()
         })
         alert.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
+    
     func buildScreen(){
         self.view.backgroundColor = UIColor(named: "YPBlack")
         profileImageView.translatesAutoresizingMaskIntoConstraints = false

@@ -6,3 +6,12 @@
 //
 
 import Foundation
+
+protocol ProfilePresenterProtocol: AnyObject{
+    var view: ProfileViewControllerProtocol? {get set}
+    
+    func exitAccount()
+    func setObserverForViewController()
+    func getProfile() -> Profile?
+    func getProfileImage() -> URL?
+}
