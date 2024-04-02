@@ -44,11 +44,16 @@ final class AuthViewController: UIViewController {
         authButton.setTitleColor(UIColor(named:"YPBlack"), for: .normal)
         authButton.layer.cornerRadius = 16
         authButton.layer.masksToBounds = true
+        authButton.accessibilityIdentifier = "Authenticate"
         authButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
     @objc private func buttonTapped(_ sender: Any){
         let webViewController = WebViewViewController()
+        let authHelper = AuthHelper(configuration: AuthConfiguration.standart)
+        let webViewPresenter = WebViewPresenter(authHelper: authHelper)
         webViewController.delegate = self
+        webViewController.presenter = webViewPresenter
+        webViewPresenter.view = webViewController
         navigationController?.pushViewController(webViewController, animated: true)
     }
     private func addSubViews(){

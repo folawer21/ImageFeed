@@ -71,7 +71,9 @@ class ProfileViewController: UIViewController {
         descriptionLabel.textColor  = UIColor(named: "YPWhite")
         descriptionLabel.text = "Hellow, world!"
         descriptionLabel.font = UIFont(name: "System Font Regular", size: 13)
+        
         exitButton.translatesAutoresizingMaskIntoConstraints = false
+        exitButton.accessibilityIdentifier = "exitButton"
         exitButton.tintColor = UIColor(named: "YPRed")
     }
     

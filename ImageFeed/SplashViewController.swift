@@ -58,7 +58,6 @@ final class SplashViewController: UIViewController {
     }
 }
 
-
 extension SplashViewController: AuthViewControllerDelegate{
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String){
         UIBlockingProgressHUD.show()

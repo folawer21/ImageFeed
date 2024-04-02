@@ -4,32 +4,94 @@
 //
 //  Created by Александр  Сухинин on 01.04.2024.
 //
-
+@testable import ImageFeed
 import XCTest
 
 final class Image_FeedTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testViewControllerCallsViewDidLoad(){
+        //given
+        let viewController = WebViewViewController()
+        let presenterSpy = WebViewPresenterSpy()
+        presenterSpy.view = viewController
+        viewController.presenter = presenterSpy
+        
+        //when
+        _ = viewController.view
+        
+        //then
+        XCTAssertTrue(presenterSpy.viewDidCallCalled)
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func testPresenterCallsLoadRequest(){
+        //given
+        let viewController = WebViewViewContollerSpy()
+        let authHelper = AuthHelper(configuration: AuthConfiguration.standart)
+        let presenter = WebViewPresenter(authHelper: authHelper)
+        viewController.presenter = presenter
+        presenter.view = viewController
+       
+        //when
+        presenter.viewDidLoad()
+    
+        //then
+        XCTAssertTrue(viewController.didLoadCalled)
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    func testProgressVisibleWhenLessThenOne(){
+        //given
+        let authHelper = AuthHelper(configuration: AuthConfiguration.standart)
+        let presenter = WebViewPresenter(authHelper: authHelper)
+        let progress: Float = 0.6
+        
+        //when
+        let shouldHideProgress = presenter.shouldHideProgress(for: progress)
+        
+        //then
+        XCTAssertFalse(shouldHideProgress)
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    func testProgressVisibleWhenOne(){
+        //given
+        let authHelper = AuthHelper(configuration: AuthConfiguration.standart)
+        let presenter = WebViewPresenter(authHelper: authHelper)
+        let progress: Float = 1.0
+        
+        //when
+        let shouldHideProgress = presenter.shouldHideProgress(for: progress)
+        
+        //then
+        XCTAssertTrue(shouldHideProgress)
     }
-
+    
+    func testAuthHelperAuthURL(){
+        //given
+        let configuration = AuthConfiguration.standart
+        let authHelper = AuthHelper(configuration: configuration)
+        
+        //when
+        let url = authHelper.authURL()!
+        let urlString = url.absoluteString
+        
+        //then
+        XCTAssertTrue(urlString.contains(configuration.authURLString))
+        XCTAssertTrue(urlString.contains(configuration.accessKey))
+        XCTAssertTrue(urlString.contains(configuration.redirectURI))
+        XCTAssertTrue(urlString.contains("code"))
+        XCTAssertTrue(urlString.contains(configuration.accessScope))
+    }
+    
+    func testCodeFromURL(){
+        //given
+        let authHelper = AuthHelper(configuration: AuthConfiguration.standart)
+        var urlComponents = URLComponents(string: "https://unsplash.com/oauth/authorize/native")!
+        urlComponents.queryItems = [URLQueryItem(name: "code", value: "test code")]
+        let url = urlComponents.url!
+        
+        //when
+        let code = authHelper.code(from: url)
+        
+        //then
+        XCTAssertEqual(code,"test code")
+    }
 }

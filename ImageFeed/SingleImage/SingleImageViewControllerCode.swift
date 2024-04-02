@@ -59,6 +59,7 @@ final class SingleImageViewControllerCode: UIViewController{
         backButton.translatesAutoresizingMaskIntoConstraints = false
         backButton.setImage(UIImage(named: "backward"), for: .normal)
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        backButton.accessibilityIdentifier = "BackButton"
         
         shareButton.translatesAutoresizingMaskIntoConstraints = false
         shareButton.setImage(UIImage(named: "shareButton"), for: .normal)
