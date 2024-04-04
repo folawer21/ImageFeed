@@ -13,8 +13,13 @@ final class TabBarController: UITabBarController{
         self.tabBar.backgroundColor = UIColor(named:"YPBlack")
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
         
-        let imageListViewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController")
+        let imageListPresenter = ImageListPresenter()
+//        guard let imageListViewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController")
+        let imageListViewController = ImagesListViewController()
         imageListViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named:"mainNoActive"), selectedImage: nil)
+        imageListViewController.presenter = imageListPresenter
+        imageListPresenter.view = imageListViewController
+        
         
         let profilePresenter = ProfilePresenter()
         let profileViewController = ProfileViewController()
@@ -23,7 +28,5 @@ final class TabBarController: UITabBarController{
         profileViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named:"profileNoActive"), selectedImage: nil)
         self.viewControllers = [imageListViewController, profileViewController]
     }
-    
-    
     
 }

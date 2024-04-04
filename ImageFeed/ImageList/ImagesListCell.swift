@@ -21,15 +21,62 @@ final class ImagesListCell: UITableViewCell{
         return formatter
     }()
     
-    @IBOutlet var imageCell: UIImageView!
-    @IBOutlet weak var likeButton: UIButton!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBAction func likTapped(_ sender: Any) {
+    private var imageCell: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.cornerRadius = 16
+        imageView.layer.masksToBounds = true
+        imageView.backgroundColor = UIColor(named: "YPGray")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    private var likeButton: UIButton = {
+        let button = UIButton.systemButton(with: UIImage(named: "likeOn") ?? UIImage(), target: nil, action: #selector(didLikeTapped))
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private var dateLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor(named: "YPWhite")
+        label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        return label
+    }()
+//    @IBOutlet var imageCell: UIImageView!
+//    @IBOutlet weak var likeButton: UIButton!
+//    @IBOutlet weak var dateLabel: UILabel!
+//    @IBAction func likTapped(_ sender: Any) {
+//        delegate?.likeButtontapped(cell: self)
+//    }
+    
+    @objc private func didLikeTapped(){
         delegate?.likeButtontapped(cell: self)
     }
-    
     func setButtonAvailability(_ flag:Bool){
         likeButton.isEnabled = flag
+    }
+    
+    func addSubViews(){
+        contentView.addSubview(imageCell)
+        contentView.addSubview(dateLabel)
+        contentView.addSubview(likeButton)
+    }
+    
+    func applyConstraints(){
+        NSLayoutConstraint.activate([
+            imageCell.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            imageCell.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            imageCell.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
+            imageCell.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            imageCell.trailingAnchor.constraint(greaterThanOrEqualTo: dateLabel.trailingAnchor, constant: 8),
+            imageCell.trailingAnchor.constraint(equalTo: likeButton.trailingAnchor),
+            imageCell.bottomAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 8),
+            dateLabel.leadingAnchor.constraint(equalTo: imageCell.leadingAnchor, constant: 8),
+            likeButton.topAnchor.constraint(equalTo: imageCell.topAnchor),
+            likeButton.widthAnchor.constraint(equalToConstant: 42),
+            likeButton.heightAnchor.constraint(equalToConstant: 42)
+        ])
     }
     
     func changeLikeImage(_ flag: Bool){
@@ -46,6 +93,8 @@ final class ImagesListCell: UITableViewCell{
         let placeholderImage = UIImage(named: "Stub")
         imageCell.kf.setImage(with: url,placeholder: placeholderImage)
         imageCell.kf.indicatorType = .activity
+        addSubViews()
+        applyConstraints()
     }
     
     override func prepareForReuse() {
