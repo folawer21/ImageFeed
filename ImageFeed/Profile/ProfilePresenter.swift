@@ -5,12 +5,10 @@
 //  Created by Александр  Сухинин on 03.04.2024.
 //
 
-import Foundation
+import UIKit
 
 final class ProfilePresenter: ProfilePresenterProtocol{
-    
-    
-    
+   
     weak var view: ProfileViewControllerProtocol?
     private var profileImageServiceObserver: NSObjectProtocol?
     private var profileService = ProfileService.shared
@@ -24,6 +22,16 @@ final class ProfilePresenter: ProfilePresenterProtocol{
             }
         didUpdateAvatar()
     }
+    
+    func logoutButtonTapped() {
+        let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Да", style: .default){ _ in
+            self.exitAccount()
+        })
+        alert.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
+        view?.showLogoutAlert(alert: alert)
+    }
+    
     
     func exitAccount() {
         logoutService.logout()

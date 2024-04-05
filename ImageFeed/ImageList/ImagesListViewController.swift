@@ -49,6 +49,7 @@ final class ImagesListViewController: UIViewController & ImageListViewController
         view.backgroundColor = UIColor(named: "YPBlack")
         tableView.delegate = self
         tableView.dataSource = self
+        presenter?.setObserverForImageList()
         addSubViews()
         applyConstraints()
         print(presenter)
@@ -73,18 +74,23 @@ final class ImagesListViewController: UIViewController & ImageListViewController
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-    func updateTableViewAnimated(){
+    func updateTableViewAnimated(from: Int, to: Int){
         //TODO: Переделать с презентером тоже
-        let oldCount = photos.count
-        guard let newCount = presenter?.getPhotosCount() else {return}
-        guard let photos = presenter?.getPhotos() else {return}
-        if oldCount != newCount {
-            tableView.performBatchUpdates {
-                let indexPaths = (oldCount..<newCount).map{i in
-                    IndexPath(row: i, section: 0)}
-                tableView.insertRows(at: indexPaths, with: .automatic)
-            } completion: { _ in }
-        }
+//        let oldCount = photos.count
+//        guard let newCount = presenter?.getPhotosCount() else {return}
+//        guard let photos = presenter?.getPhotos() else {return}
+//        if oldCount != newCount {
+//            tableView.performBatchUpdates {
+//                let indexPaths = (oldCount..<newCount).map{i in
+//                    IndexPath(row: i, section: 0)}
+//                tableView.insertRows(at: indexPaths, with: .automatic)
+//            } completion: { _ in }
+//        }
+        tableView.performBatchUpdates {
+            let indexPaths = (from..<to).map{i in
+                IndexPath(row: i, section: 0)}
+            tableView.insertRows(at: indexPaths, with: .automatic)
+        } completion: { _ in }
     }
 }
 
@@ -109,7 +115,10 @@ extension ImagesListViewController: UITableViewDelegate{
 //        singleImageController.modalPresentationStyle = .fullScreen
 //        show(singleImageController, sender: self)
         guard let singleImageController = presenter?.getSingleImage(indexPath: indexPath) else {return }
-        show(singleImageController, sender: self)
+//        show(singleImageController, sender: self)
+        //TODO: Я ВОТ ТУТ ОСТАНОВИЛСЯ ПРОВЕРИТЬ ПРЕЗЕНТ ШОУ НЕ ОЧ РАБОТАЕТ ЕСЛИ ЧЕСТНО
+        //TODO: ОСТАЛОСЬ ТЕСТЫ НАПИСАТЬ В ОСТАЛЬНОМ ВСЕ РАБОТАЕТ
+        present(singleImageController, animated: true)
 
        }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

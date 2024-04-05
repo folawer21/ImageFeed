@@ -1,7 +1,7 @@
 import UIKit
 import Kingfisher
 
-class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
   
     
     private lazy var profileImageView = UIImageView()
@@ -50,14 +50,17 @@ class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
     }
     @objc
     private func exitButtonTapped(){
-        let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Да", style: .default){ _ in
-            self.presenter?.exitAccount()
-        })
-        alert.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
+        presenter?.logoutButtonTapped()
+//        let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "Да", style: .default){ _ in
+//            self.presenter?.exitAccount()
+//        })
+//        alert.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
+//        present(alert, animated: true, completion: nil)
     }
-    
+    func showLogoutAlert(alert: UIAlertController){
+        present(alert,animated: true,completion: nil)
+    }
     func buildScreen(){
         self.view.backgroundColor = UIColor(named: "YPBlack")
         profileImageView.translatesAutoresizingMaskIntoConstraints = false

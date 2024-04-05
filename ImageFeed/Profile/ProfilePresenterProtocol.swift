@@ -14,4 +14,5 @@ protocol ProfilePresenterProtocol: AnyObject{
     func setObserverForViewController()
     func getProfile() -> Profile?
     func getProfileImage() -> URL?
+    func logoutButtonTapped()
 }

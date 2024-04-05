@@ -12,7 +12,7 @@ final class ImageListPresenter: ImageListPresenterProtocol{
     weak var view: ImageListViewControllerProtocol?
     private var imageListServiceObserver: NSObjectProtocol?
     private lazy var imageListService = ImageListService()
-    
+    private var photosCount: Int = 0
     func likeTapped(_ cell: ImagesListCell) {
         cell.setButtonAvailability(false)
         guard let tableView = view?.getTableView() else {return }
@@ -42,10 +42,20 @@ final class ImageListPresenter: ImageListPresenterProtocol{
         imageListService.fetchPhotosNextPage()
     }
     
+    private func didUpdateTableViewAnimated(){
+        let oldCount = photosCount
+        let newCount = imageListService.photos.count
+        photosCount = newCount
+        if oldCount != newCount{
+            view?.updateTableViewAnimated(from: oldCount, to: newCount)
+        }
+        
+    }
+    
     func setObserverForImageList() {
         imageListServiceObserver = NotificationCenter.default.addObserver(forName: ImageListService.didChangeNotification, object: nil, queue: .main){ [weak self] _  in
             guard let self = self else {return }
-            self.view?.updateTableViewAnimated()
+            self.didUpdateTableViewAnimated()
         }
     }
     

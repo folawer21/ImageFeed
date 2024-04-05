@@ -80,16 +80,19 @@ final class ImagesListCell: UITableViewCell{
     }
     
     func changeLikeImage(_ flag: Bool){
-        if flag{
-            self.likeButton.setImage(UIImage(named: "likeOn"), for: .normal)
-        }else{
-            self.likeButton.setImage(UIImage(named: "likeOff"), for: .normal)
-        }
+        self.likeButton.tintColor = flag ? UIColor(named: "YPRed") : UIColor(named: "White50")
+//        if flag{
+//            self.likeButton.setImage(UIImage(named: "likeOn"), for: .normal)
+//        }else{
+//            self.likeButton.setImage(UIImage(named: "likeOff"), for: .normal)
+//        }
     }
 
     func configCell(photoUrl url: URL, isLiked: Bool,date: Date?){
+        contentView.backgroundColor = UIColor(named: "YPBlack")
         self.dateLabel.text = date != nil ? dateFormatter.string(from: date!) : ""
-        self.likeButton.setImage(UIImage(named: isLiked ? "likeOn" : "likeOff"), for: .normal)
+        self.likeButton.tintColor = isLiked ? UIColor(named: "YPRed") : UIColor(named: "White50")
+//        self.likeButton.setImage(UIImage(named: isLiked ? "likeOn" : "likeOff"), for: .normal)
         let placeholderImage = UIImage(named: "Stub")
         imageCell.kf.setImage(with: url,placeholder: placeholderImage)
         imageCell.kf.indicatorType = .activity

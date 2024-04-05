@@ -9,6 +9,6 @@ import UIKit
 
 protocol ImageListViewControllerProtocol: AnyObject{
     var presenter: ImageListPresenterProtocol? {get set}
-    func updateTableViewAnimated()
+    func updateTableViewAnimated(from: Int, to: Int)
     func getTableView() -> UITableView
 }
