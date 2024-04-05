@@ -9,5 +9,11 @@
 import XCTest
 
 final class ImageListViewControllerTests: XCTestCase {
+    func testLikeButtonTapped(){
+        
+    }
     
+    func testSetObserverForImageList(){
+        
+    }
 }
