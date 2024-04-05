@@ -49,22 +49,17 @@ final class ImagesListViewController: UIViewController & ImageListViewController
         view.backgroundColor = UIColor(named: "YPBlack")
         tableView.delegate = self
         tableView.dataSource = self
-        presenter?.setObserverForImageList()
+        setObserver()
         addSubViews()
-        applyConstraints()
-        print(presenter)
-        
+        applyConstraints()  
         presenter?.fetchStartPhotos()
-//        imageListService.fetchPhotosNextPage()
-        
-        presenter?.setObserverForImageList()
-//        imageListServiceObserver = NotificationCenter.default.addObserver(forName: ImageListService.didChangeNotification, object: nil, queue: .main){ [weak self] _  in
-//            guard let self = self else {return }
-//            self.updateTableViewAnimated()
-//        }
     }
+    
     func addSubViews(){
         view.addSubview(tableView)
+    }
+    func setObserver(){
+        presenter?.setObserverForImageList()
     }
     func applyConstraints(){
         NSLayoutConstraint.activate([
@@ -74,18 +69,8 @@ final class ImagesListViewController: UIViewController & ImageListViewController
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
+    
     func updateTableViewAnimated(from: Int, to: Int){
-        //TODO: Переделать с презентером тоже
-//        let oldCount = photos.count
-//        guard let newCount = presenter?.getPhotosCount() else {return}
-//        guard let photos = presenter?.getPhotos() else {return}
-//        if oldCount != newCount {
-//            tableView.performBatchUpdates {
-//                let indexPaths = (oldCount..<newCount).map{i in
-//                    IndexPath(row: i, section: 0)}
-//                tableView.insertRows(at: indexPaths, with: .automatic)
-//            } completion: { _ in }
-//        }
         tableView.performBatchUpdates {
             let indexPaths = (from..<to).map{i in
                 IndexPath(row: i, section: 0)}
@@ -97,39 +82,23 @@ final class ImagesListViewController: UIViewController & ImageListViewController
 
 extension ImagesListViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)-> CGFloat{
-//        let photo = imageListService.photos[indexPath.row]
-//        let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
-//        let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
-//        let imageWidth = photo.size.width
-//        let scale = imageViewWidth / imageWidth
-//        let cellHeight = photo.size.height*scale + imageInsets.top + imageInsets.bottom
-//        return cellHeight
         guard let cellHeight = presenter?.getCellHeight(indexPath: indexPath) else {return 0}
         return cellHeight
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let singleImageController  = SingleImageViewControllerCode()
-//        guard let url = URL(string:photos[indexPath.row].largeImageURL) else {return }
-//        singleImageController.url = url
-//        singleImageController.modalPresentationStyle = .fullScreen
-//        show(singleImageController, sender: self)
         guard let singleImageController = presenter?.getSingleImage(indexPath: indexPath) else {return }
-//        show(singleImageController, sender: self)
         present(singleImageController, animated: true)
 
        }
+    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        if indexPath.row == (imageListService.photos.count - 1) {
-//            imageListService.fetchPhotosNextPage()
-//        }
         presenter?.fetchNewPhotos(indexPath: indexPath)
     }
 }
 
 extension ImagesListViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//      return imageListService.photos.count
         guard let count = presenter?.getPhotosCount() else {return 0}
         return count
     }
@@ -149,25 +118,5 @@ extension ImagesListViewController: UITableViewDataSource{
 extension ImagesListViewController: ImageListCellDelegate{
     func likeButtontapped(cell: ImagesListCell) {
         presenter?.likeTapped(cell)
-//        cell.setButtonAvailability(false)
-//        guard let indexPath = self.tableView.indexPath(for: cell) else{ return }
-//        let photo = imageListService.photos[indexPath.row]
-//        let isLiked = photo.isLiked
-//        let id = photo.id
-//        imageListService.likeButtonService(id: id, isLike: isLiked){ result in
-//            DispatchQueue.main.async{
-//                switch result{
-//                case .success:
-//                    cell.changeLikeImage(!isLiked)
-//                case .failure(let error):
-//                    print(error)
-//                }
-//                cell.setButtonAvailability(true)
-//            }
-//        }
-    }
-    
-    
+    }   
 }
-
-

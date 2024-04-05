@@ -19,7 +19,7 @@ struct ProfileResult: Codable{
         case bio = "bio"
     }
 }
-public struct Profile {
+struct Profile {
     var username: String
     var name: String
     var loginName: String

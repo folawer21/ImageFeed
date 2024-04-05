@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol ProfileViewControllerProtocol: AnyObject{
+protocol ProfileViewControllerProtocol: AnyObject{
     var presenter: ProfilePresenterProtocol? { get set }
     
     func updateAvatar(with url: URL)

@@ -10,10 +10,26 @@ import XCTest
 
 final class ImageListViewControllerTests: XCTestCase {
     func testLikeButtonTapped(){
+        let controller = ImagesListViewController()
+        let presenter = ImagePresenterSpy()
+        controller.presenter = presenter
+        presenter.view = controller
+        let cell = ImagesListCell()
         
+        controller.likeButtontapped(cell: cell)
+        
+        XCTAssertTrue(presenter.didLikeTapped)
     }
     
-    func testSetObserverForImageList(){
+    func testSetObserver(){
+        let controller = ImagesListViewController()
+        let presenter = ImagePresenterSpy()
+        controller.presenter = presenter
+        presenter.view = controller
         
+        controller.setObserver()
+        
+        XCTAssertTrue(presenter.didObserverSet)
     }
+    
 }
