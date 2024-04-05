@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ProfilePresenterProtocol: AnyObject{
+public protocol ProfilePresenterProtocol: AnyObject{
     var view: ProfileViewControllerProtocol? {get set}
     
     func exitAccount()

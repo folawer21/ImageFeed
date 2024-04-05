@@ -5,4 +5,9 @@
 //  Created by Александр  Сухинин on 05.04.2024.
 //
 
-import Foundation
+@testable import ImageFeed
+import XCTest
+
+final class ImageListViewControllerTests: XCTestCase {
+    
+}

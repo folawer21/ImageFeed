@@ -116,8 +116,6 @@ extension ImagesListViewController: UITableViewDelegate{
 //        show(singleImageController, sender: self)
         guard let singleImageController = presenter?.getSingleImage(indexPath: indexPath) else {return }
 //        show(singleImageController, sender: self)
-        //TODO: Я ВОТ ТУТ ОСТАНОВИЛСЯ ПРОВЕРИТЬ ПРЕЗЕНТ ШОУ НЕ ОЧ РАБОТАЕТ ЕСЛИ ЧЕСТНО
-        //TODO: ОСТАЛОСЬ ТЕСТЫ НАПИСАТЬ В ОСТАЛЬНОМ ВСЕ РАБОТАЕТ
         present(singleImageController, animated: true)
 
        }
