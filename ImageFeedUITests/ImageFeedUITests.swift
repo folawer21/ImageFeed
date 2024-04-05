@@ -19,7 +19,7 @@ final class ImageFeedUITests: XCTestCase {
 
 
     func testAuth() throws{
-        sleep(20)
+        sleep(10)
         let authButton = app.buttons["Authenticate"]
         
         authButton.tap()
@@ -30,13 +30,13 @@ final class ImageFeedUITests: XCTestCase {
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         loginTextField.tap()
         loginTextField.typeText("folawer21@mail.ru")
-        loginTextField.swipeUp()
+        app.toolbars.buttons["Done"].tap()
         
         let passwordTextField = webView.descendants(matching: .secureTextField).element
-        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
+        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 10))
         passwordTextField.tap()
         passwordTextField.typeText("Sasaazaz22@")
-        webView.swipeUp()
+        app.toolbars.buttons["Done"].tap()
         
         webView.buttons["Login"].tap()
         let tablesQuery = app.tables
@@ -48,9 +48,9 @@ final class ImageFeedUITests: XCTestCase {
     }
     
     func testFeed() throws{
-        sleep(10)
-        let tablesQuery = app.tables
         sleep(5)
+        let tablesQuery = app.tables
+        sleep(10)
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
         cell.swipeUp()
         
