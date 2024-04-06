@@ -34,7 +34,7 @@ final class ImageListPresenter: ImageListPresenterProtocol{
     }
     
     func fetchNewPhotos(indexPath: IndexPath) {
-        if indexPath.row == (imageListService.photos.count - 1) {
+        if indexPath.row == (imageListService.photos.count - 1) && !ProcessInfo().arguments.contains("testMode"){
             imageListService.fetchPhotosNextPage()
         }
     }

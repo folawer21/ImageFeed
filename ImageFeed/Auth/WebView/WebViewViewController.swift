@@ -59,6 +59,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     
     func load(request: URLRequest){
         webView.load(request)
+        print(21312)
     }
     
 //    private func loadAuthView(){

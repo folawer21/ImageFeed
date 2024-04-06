@@ -14,6 +14,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ProgressHUD.animationType = .activityIndicator
         ProgressHUD.colorHUD = .black
         ProgressHUD.colorAnimation = .lightGray
+        
+        #if DEBUG
+        if CommandLine.arguments.contains("-disableAnimations"){
+            UIView.setAnimationsEnabled(false)
+        }
+        #endif
+        
         return true
     }
 

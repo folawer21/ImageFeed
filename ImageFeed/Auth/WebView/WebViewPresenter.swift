@@ -28,6 +28,7 @@ final class WebViewPresenter: WebViewPresenterProtocol{
     
     private func loadWebView(){
         guard let request = authHelper.authRequest() else {return }
+        print(444444)
         view?.load(request: request)
         didUpdateProgressValue(0)
     }

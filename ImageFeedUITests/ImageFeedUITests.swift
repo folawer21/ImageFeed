@@ -12,6 +12,8 @@ final class ImageFeedUITests: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         continueAfterFailure = false
+        app.launchArguments.append("-disableAnimations")
+        app.launchArguments.append("testMode")
         app.launch()
         // In UI tests it is usually best to stop immediately when a failure occurs.
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
@@ -21,7 +23,7 @@ final class ImageFeedUITests: XCTestCase {
     func testAuth() throws{
         sleep(10)
         let authButton = app.buttons["Authenticate"]
-        
+        XCTAssertTrue(authButton.waitForExistence(timeout: 5))
         authButton.tap()
         let webView = app.webViews["UnsplashWebView"]
         XCTAssertTrue(webView.waitForExistence(timeout: 5))
@@ -48,9 +50,9 @@ final class ImageFeedUITests: XCTestCase {
     }
     
     func testFeed() throws{
-        sleep(5)
+        sleep(20)
         let tablesQuery = app.tables
-        sleep(10)
+        
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
         cell.swipeUp()
         
