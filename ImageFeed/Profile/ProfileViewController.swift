@@ -69,12 +69,14 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         profileImageView.backgroundColor = UIColor(named: "YPBlack")
         profileImageView.image = UIImage(named: "ekaterina")
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.accessibilityIdentifier = "userFIO"
         nameLabel.text = "Екатерина Новикова"
         nameLabel.textColor = UIColor(named: "YPWhite")
         nameLabel.font = UIFont(name: "System Font Regular", size: 23.0)
        
         nicknameLabel.translatesAutoresizingMaskIntoConstraints = false
         nicknameLabel.textColor = UIColor(named: "YPGray")
+        nicknameLabel.accessibilityIdentifier = "nicknameLabel"
         nicknameLabel.text = "@ekaterina_nov"
         nicknameLabel.font = UIFont(name: "System Font Regular", size: 13)
       

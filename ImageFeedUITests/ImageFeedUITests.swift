@@ -21,7 +21,7 @@ final class ImageFeedUITests: XCTestCase {
 
 
     func testAuth() throws{
-        sleep(10)
+        sleep(3)
         let authButton = app.buttons["Authenticate"]
         XCTAssertTrue(authButton.waitForExistence(timeout: 5))
         authButton.tap()
@@ -50,7 +50,7 @@ final class ImageFeedUITests: XCTestCase {
     }
     
     func testFeed() throws{
-        sleep(20)
+        sleep(5)
         let tablesQuery = app.tables
         
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
@@ -79,9 +79,9 @@ final class ImageFeedUITests: XCTestCase {
     func testProfile() throws{
         sleep(5)
         app.tabBars.buttons.element(boundBy: 1).tap()
-        
-        XCTAssertTrue(app.staticTexts["Alexander Sukhinin"].exists)
-        XCTAssertTrue(app.staticTexts["@folawer21"].exists)
+        sleep(1)
+        XCTAssertTrue(app.staticTexts["userFIO"].exists)
+        XCTAssertTrue(app.staticTexts["nicknameLabel"].exists)
         
         app.buttons["exitButton"].tap()
         
