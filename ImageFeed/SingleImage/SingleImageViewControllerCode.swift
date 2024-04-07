@@ -145,4 +145,3 @@ extension SingleImageViewControllerCode: UIScrollViewDelegate{
         imageView
     }
 }
-

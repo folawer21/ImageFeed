@@ -9,7 +9,6 @@ import UIKit
 import Kingfisher
 
 final class ImagesListViewController: UIViewController & ImageListViewControllerProtocol {
-//    @IBOutlet private var tableView: UITableView!
     private var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -22,8 +21,6 @@ final class ImagesListViewController: UIViewController & ImageListViewController
     private let photosName: [String] = Array(0..<20).map{"\($0)"}
     var photos: [Photo] = []
     var presenter: ImageListPresenterProtocol?
-//    private lazy var imageListService = ImageListService()
-//    private var imageListServiceObserver: NSObjectProtocol?
 
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()

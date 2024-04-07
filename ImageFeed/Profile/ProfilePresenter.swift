@@ -32,7 +32,6 @@ final class ProfilePresenter: ProfilePresenterProtocol{
         view?.showLogoutAlert(alert: alert)
     }
     
-    
     func exitAccount() {
         logoutService.logout()
     }

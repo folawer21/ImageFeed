@@ -13,5 +13,4 @@ protocol ProfileViewControllerProtocol: AnyObject{
     func updateAvatar(with url: URL)
     func setProfileData()
     func showLogoutAlert(alert: UIAlertController)
-    
 }

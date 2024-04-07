@@ -8,8 +8,6 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
     private lazy var nameLabel = UILabel()
     private lazy var nicknameLabel = UILabel()
     private lazy var  descriptionLabel = UILabel()
-//    private lazy var profileService = ProfileService.shared
-//    private lazy var logoutService = ProfileLogoutService.shared
     var presenter: ProfilePresenterProtocol?
     private lazy var tokenStorage = OAuth2TokenStorage()
     private var profileImageServiceObserver: NSObjectProtocol?
@@ -19,18 +17,8 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         configureScreen()
         setProfileData()
         setObserver()
-//        profileImageServiceObserver = NotificationCenter.default.addObserver(
-//            forName: ProfileImageService.didChangeNotification, object: nil, queue: .main){ [weak self] _ in
-//                guard let self = self else {return }
-//                self.updateAvatar()
-//            }
-//        updateAvatar()
     }
     func updateAvatar(with url: URL){
-//        guard
-//            let profileImageURL = ProfileImageService.shared.avatarURL,
-//            let url = URL(string: profileImageURL)
-//        else {return}
         let processor = RoundCornerImageProcessor(cornerRadius: 32)
         profileImageView.kf.setImage(with: url,options: [.processor(processor)])
     }
@@ -48,19 +36,16 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         addSubViews()
         activateConstraints()
     }
+    
     @objc
     private func exitButtonTapped(){
         presenter?.logoutButtonTapped()
-//        let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "Да", style: .default){ _ in
-//            self.presenter?.exitAccount()
-//        })
-//        alert.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
-//        present(alert, animated: true, completion: nil)
     }
+    
     func showLogoutAlert(alert: UIAlertController){
         present(alert,animated: true,completion: nil)
     }
+    
     func buildScreen(){
         self.view.backgroundColor = UIColor(named: "YPBlack")
         profileImageView.translatesAutoresizingMaskIntoConstraints = false

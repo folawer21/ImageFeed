@@ -18,7 +18,6 @@ final class ProfileService{
     private var task: URLSessionTask?
     private var lastToken: String?
     
-    
     private init(){}
     
     private func makeURLRequest(token: String) -> URLRequest?{
